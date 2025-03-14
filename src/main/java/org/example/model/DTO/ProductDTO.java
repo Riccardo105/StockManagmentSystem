@@ -1,7 +1,7 @@
 package org.example.model.DTO;
 
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 /** ProductDTO represent the product table in the Database.
  * Stock, buyingPrice and sellingPrice are the only mutable fields (through setter)
@@ -10,7 +10,6 @@ import jakarta.persistence.*;
 @Table(name = "product")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class ProductDTO {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

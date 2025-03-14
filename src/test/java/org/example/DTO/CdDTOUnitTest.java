@@ -2,7 +2,6 @@ package org.example.DTO;
 
 import org.example.model.DTO.CdDTO;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CdDTOUnitTest implements ProductsTestsInterface<CdDTO>{

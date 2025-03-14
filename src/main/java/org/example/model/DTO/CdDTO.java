@@ -1,18 +1,16 @@
 package org.example.model.DTO;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table( name = "CD")
+@Table( name = "cd")
 @PrimaryKeyJoinColumn(name = "id")
 public class CdDTO extends MusicDTO {
     private int numOfDiscs;
     private String conditions;
     private int bitrateMbps;
 
-    // no argument constructor required by JPA
+    // no argument constructor used by Hibernate to create object after read operation
     protected CdDTO() {}
 
     private CdDTO (Builder builder) {

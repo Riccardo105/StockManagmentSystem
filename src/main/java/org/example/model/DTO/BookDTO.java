@@ -1,7 +1,5 @@
 package org.example.model.DTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import javax.persistence.*;
 
 import java.sql.Date;
 
@@ -20,7 +18,7 @@ public abstract class BookDTO extends ProductDTO{
     private String series;
     private Date releaseDate;
 
-    // no argument constructor required by JPA
+    // no argument constructor used by Hibernate to create object after read operation
     protected BookDTO() {}
 
     protected BookDTO(Builder<?> builder) {

@@ -1,18 +1,16 @@
 package org.example.model.DTO;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "audioBook")
+@Table(name = "audiobook")
 @PrimaryKeyJoinColumn(name = "id")
 public class AudioBookDTO extends BookDTO {
     private String narrator;
     private float fileSize;
     private String fileFormat;
 
-    // no argument constructor required by JPA
+    // no argument constructor used by Hibernate to create object after read operation
     protected AudioBookDTO() {}
 
     private AudioBookDTO(Builder builder) {

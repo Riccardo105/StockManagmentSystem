@@ -1,18 +1,16 @@
 package org.example.model.DTO;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "paperBook")
+@Table(name = "paperbook")
 @PrimaryKeyJoinColumn(name = "id")
 public class PaperBookDTO extends BookDTO {
     private String bindingType;
     private int numPages;
     private String edition;
 
-    // no argument constructor required by JPA
+    // no argument constructor used by Hibernate to create object after read operation
     protected PaperBookDTO() {}
 
     private PaperBookDTO( Builder builder){
@@ -59,17 +57,17 @@ public class PaperBookDTO extends BookDTO {
         private int numPages;
         private String edition;
 
-        public Builder bindingType(String bindingType){
+        public Builder setBindingType(String bindingType){
             this.bindingType = bindingType;
             return this;
         }
 
-        public Builder numPages(int numPages){
+        public Builder setNumPages(int numPages){
             this.numPages = numPages;
             return this;
         }
 
-        public Builder edition(String edition){
+        public Builder setEdition(String edition){
             this.edition = edition;
             return this;
         }

@@ -1,4 +1,4 @@
-package test.java.org.example.DTO;
+package org.example.DTO;
 
 import org.example.DTO.ProductsTestsInterface;
 import org.example.model.DTO.AudioBookDTO;

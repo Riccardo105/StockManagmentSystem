@@ -1,7 +1,9 @@
 package org.example.config;
 
+import org.hibernate.Session;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DbConnectionUnitTest {
     /**
@@ -11,6 +13,17 @@ public class DbConnectionUnitTest {
     @Test
     public void testSessionFactoryInitialization() {
         assertNotNull(DbConnection.getSessionFactory(), "SessionFactory should not be null");
+    }
+
+    @Test
+    public void testSessionFactoryShutdown() {
+        DbConnection.SessionFactoryShutdown();
+
+        assertNull(DbConnection.getSessionFactory(), "SessionFactory should be null");
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            Session session = DbConnection.getSession();
+
+        });
     }
 }
 

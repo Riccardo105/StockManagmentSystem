@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="defaultdb@mysql-f4995cb-stock-managment-system.d.aivencloud.com" uuid="b4c0846f-0a5f-4df3-bdf9-5e7566162c6f">
+    <data-source source="LOCAL" name="Stock_management_system@mysql-f4995cb-stock-managment-system.d.aivencloud.com" uuid="cbac06b1-9b08-4f67-b0dd-c60fac7ebdba">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://mysql-f4995cb-stock-managment-system.d.aivencloud.com:23428/defaultdb?sslMode=REQUIRED&amp;sslCa=C:\Users\User\IdeaProjects\StockManagmentSystem\src\main\resources\ca.pem</jdbc-url>
+      <jdbc-url>jdbc:mysql://mysql-f4995cb-stock-managment-system.d.aivencloud.com:23428/Stock_management_system?sslMode=REQUIRED&amp;sslCa=C:\\Users\\User\\IdeaProjects\\StockManagmentSystem\\src\\main\\resources\\ca.pem</jdbc-url>
+      <jdbc-additional-properties>
+        <property name="com.intellij.clouds.kubernetes.db.host.port" />
+        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
+        <property name="com.intellij.clouds.kubernetes.db.resource.type" value="Deployment" />
+        <property name="com.intellij.clouds.kubernetes.db.container.port" />
+      </jdbc-additional-properties>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="Test_Stock_management_system@mysql-f4995cb-stock-managment-system.d.aivencloud.com" uuid="3be00971-a1fb-429b-8d64-7e579fdf15d5">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://mysql-f4995cb-stock-managment-system.d.aivencloud.com:23428/Test_Stock_management_system?sslMode=REQUIRED&amp;sslCa=C:\\Users\\User\\IdeaProjects\\StockManagmentSystem\\src\\main\\resources\\ca.pem</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />

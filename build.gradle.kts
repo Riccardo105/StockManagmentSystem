@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id ("co.uzzu.dotenv.gradle") version "4.0.0"
 }
 
 group = "org.example"
@@ -28,4 +29,15 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.register("checkDatabaseUrl") {
+    doLast {
+        val databaseUrl = System.getenv("DATABASE_URL")
+        if (databaseUrl != null) {
+            println("DATABASE_URL is set to: $databaseUrl")
+        } else {
+            println("DATABASE_URL is not set!")
+        }
+    }
 }

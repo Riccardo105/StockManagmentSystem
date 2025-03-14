@@ -1,7 +1,5 @@
 package org.example.model.DTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import javax.persistence.*;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -22,7 +20,7 @@ public abstract class MusicDTO extends ProductDTO {
         private Time playTime;
         private int tracksNum;
 
-    // no argument constructor required by JPA
+    // no argument constructor used by Hibernate to create object after read operation
     protected MusicDTO() {}
 
         protected MusicDTO(Builder<?> builder) {

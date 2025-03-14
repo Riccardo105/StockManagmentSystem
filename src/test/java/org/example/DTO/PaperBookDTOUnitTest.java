@@ -20,9 +20,9 @@ public class PaperBookDTOUnitTest implements ProductsTestsInterface<PaperBookDTO
                 .setGenre("Test genre")
                 .setSeries("Test series")
                 .setReleaseDate(java.sql.Date.valueOf("2023-10-15"))
-                .bindingType("Test binding type")
-                .numPages(10)
-                .edition("test edition")
+                .setBindingType("Test binding type")
+                .setNumPages(10)
+                .setEdition("test edition")
                 .build();
     }
 
