@@ -49,7 +49,7 @@ public class PaperBookDAOUnitTest extends AbstractDAOUnitTest<PaperBookDTO> {
     @Override
     public void testCreate() {
         PaperBookDAO paperBookDAO = new PaperBookDAO(sessionFactory);
-        PaperBookDTO ebook = new PaperBookDTO.Builder()
+        PaperBookDTO paperBook = new PaperBookDTO.Builder()
                 .setTitle("Test title")
                 .setBuyingPrice(10.0f)
                 .setStock(10)
@@ -65,7 +65,7 @@ public class PaperBookDAOUnitTest extends AbstractDAOUnitTest<PaperBookDTO> {
                 .setEdition("Test edition")
                 .build();
 
-        Integer generatedId = paperBookDAO.create(ebook);
+        Integer generatedId = paperBookDAO.create(paperBook);
 
         Session session = sessionFactory.openSession();
 
@@ -77,17 +77,17 @@ public class PaperBookDAOUnitTest extends AbstractDAOUnitTest<PaperBookDTO> {
         // entry is deleted regardless of assertion
         HelperDeleteDTO(sessionFactory.openSession(), dto);
 
-        System.out.println("Expected title: " + ebook.getTitle());
+        System.out.println("Expected title: " + paperBook.getTitle());
         System.out.println("Actual title: " + dto.getTitle());
-        assertEquals(ebook.getTitle(), dto.getTitle());
+        assertEquals(paperBook.getTitle(), dto.getTitle());
 
-        System.out.println("Expected author: " + ebook.getAuthor());
+        System.out.println("Expected author: " + paperBook.getAuthor());
         System.out.println("Actual author: " + dto.getAuthor());
-        assertEquals(ebook.getAuthor(), dto.getAuthor());
+        assertEquals(paperBook.getAuthor(), dto.getAuthor());
 
-        System.out.println("Expected number of pages: " + ebook.getNumPages());
+        System.out.println("Expected number of pages: " + paperBook.getNumPages());
         System.out.println("Actual number of pages: " + dto.getNumPages());
-        assertEquals(ebook.getNumPages(), dto.getNumPages());
+        assertEquals(paperBook.getNumPages(), dto.getNumPages());
 
 
     }
@@ -193,9 +193,9 @@ public class PaperBookDAOUnitTest extends AbstractDAOUnitTest<PaperBookDTO> {
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
 
-        PaperBookDTO PaperBookToDelete = session.get(PaperBookDTO.class, generatedId);
-        if (PaperBookToDelete != null) {
-            paperBookDAO.delete(PaperBookToDelete);
+        PaperBookDTO paperBookToDelete = session.get(PaperBookDTO.class, generatedId);
+        if (paperBookToDelete != null) {
+            paperBookDAO.delete(paperBookToDelete);
         }
 
         tx.commit();

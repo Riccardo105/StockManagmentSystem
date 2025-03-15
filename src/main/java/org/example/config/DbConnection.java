@@ -1,4 +1,5 @@
 package org.example.config;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.example.model.DTO.*;
 import org.hibernate.Metamodel;
 import org.hibernate.Session;
@@ -10,13 +11,19 @@ import org.hibernate.service.ServiceRegistry;
 
 public class DbConnection {
     private static  SessionFactory sessionFactory;
-
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String databaseURL;
     static {
         try {
 
             Configuration configuration = new Configuration();
-            // env variables setup through RUN->EDIT CONFIG
-            String databaseURL = System.getenv("DATABASE_URL");
+            boolean isTestEnvironment = System.getProperty("test.env") != null; // Check if running in test mode
+
+            if (isTestEnvironment) {
+                databaseURL = dotenv.get("TEST_DATABASE_URL"); // Use test database
+            } else {
+                databaseURL = dotenv.get("DATABASE_URL"); // Use production database
+            }
             if (databaseURL == null) {
                 throw new IllegalStateException("DATABASE_URL is not set");
             }
@@ -66,6 +73,10 @@ public class DbConnection {
     // this method used only for: testing and initialising SessionFactory at program startup
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    public static String getDatabaseURL() {
+        return databaseURL; // Expose the database URL
     }
 
 }

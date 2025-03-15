@@ -22,6 +22,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation ("org.hibernate:hibernate-core:5.6.10.Final")
     implementation ("mysql:mysql-connector-java:8.0.26")
+    implementation("io.github.cdimascio:dotenv-java:2.3.2")
     implementation ("jakarta.persistence:jakarta.persistence-api:3.1.0")
 }
 

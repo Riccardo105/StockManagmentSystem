@@ -1,6 +1,6 @@
 package org.example;
 
-
+import io.github.cdimascio.dotenv.Dotenv;
 import org.example.config.DbConnection;
 import org.example.model.DAO.EBookDAO;
 import org.example.model.DTO.EBookDTO;
@@ -20,16 +20,7 @@ public class Main {
         SessionFactory sessionFactory = DbConnection.getSessionFactory();
         System.out.println(sessionFactory);
 
-        Metamodel metamodel = sessionFactory.getMetamodel();
-        System.out.println(metamodel);
-        if (metamodel.getEntities().isEmpty()) {
-            System.out.println("No entities found!"); }
-        metamodel.getEntities().forEach(entityType -> {
-            System.out.println("Entity: " + entityType.getJavaType().getName());
-        });
 
-        // Map<String, Object> props = sessionFactory.getProperties();
-        // props.forEach((key, value) -> System.out.println(key + ": " + value));
 
     }
     }
