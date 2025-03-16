@@ -1,0 +1,15 @@
+package org.example.model.DAO.products;
+
+import org.example.model.DTO.products.DigitalDTO;
+import org.hibernate.SessionFactory;
+
+public class DigitalDAO extends AbstractDAO<DigitalDTO> {
+
+    public DigitalDAO(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
+
+    protected Class<DigitalDTO> getDTOClass() {
+        return DigitalDTO.class;
+    }
+}

@@ -1,13 +1,9 @@
 package org.example.config;
 import io.github.cdimascio.dotenv.Dotenv;
-import org.example.model.DTO.*;
-import org.hibernate.Metamodel;
+import org.example.model.DTO.products.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 
 public class DbConnection {
     private static  SessionFactory sessionFactory;
