@@ -158,6 +158,14 @@ public abstract class AbstractDAO<T> {
         }
     }
 
+    /**
+     *
+     * @return *subclass corresponding DTO class type.*
+     *
+     * This is required by the read operation (see above) due to java's runtime type erasure.
+     * Due to erasure java defaults all type generics (T) to "Object" at runtime if not provided with a type.
+     * Thus, each subclass needs to set its corresponding DTO class type so that the object of correct type can be read
+     */
     protected abstract Class<T> getDTOClass();
 
 

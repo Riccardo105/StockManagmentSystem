@@ -3,20 +3,20 @@ package org.example.model.DTO.products;
 import javax.persistence.*;
 
 @Entity
-@Table (name = "ebook")
-@PrimaryKeyJoinColumn(name = "id")
-public class EBookDTO extends BookDTO {
-    private float fileSize;
-    private String fileFormat;
-    private int numPages;
+        @Table (name = "ebook")
+        @PrimaryKeyJoinColumn(name = "id")
+        public class EBookDTO extends BookDTO {
+            private float fileSize;
+            private String fileFormat;
+            private int numPages;
 
 
-    // no argument constructor used by Hibernate to create object after read operation
-    protected EBookDTO() {}
+            // no argument constructor used by Hibernate to create object after read operation
+            protected EBookDTO() {}
 
-    private EBookDTO(Builder builder) {
-        super(builder);
-        this.fileSize = builder.fileSize;
+            private EBookDTO(Builder builder) {
+                super(builder);
+                this.fileSize = builder.fileSize;
         this.fileFormat = builder.fileFormat;
         this.numPages = builder.numPages;
 

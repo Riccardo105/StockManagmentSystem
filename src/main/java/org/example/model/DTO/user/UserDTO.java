@@ -22,6 +22,10 @@ public class UserDTO {
     private String password;
     private boolean activated = false;
 
+    public int getId() {
+        return id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
