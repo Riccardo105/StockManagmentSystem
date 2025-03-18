@@ -9,8 +9,7 @@ import org.hibernate.SessionFactory;
 public class Main {
     public static void main(String[] args) {
 
-        SessionFactory sessionFactory = DbConnection.getSessionFactory();
-        System.out.println(sessionFactory);
+        System.out.println("Hello World");
 
 
 
