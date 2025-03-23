@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /* throughout the tests, the sessionFactory passed to the DAO is taken from
    the @BeforeAll in the AbstractDAUnitTest
  */
-public class EBookDAOUnitTest extends AbstractDAOUnitTest<EBookDTO> {
+public class EBookDAOIntegrationTest extends AbstractDAOIntegrationTest<EBookDTO> {
 
     // session passed by tests
     protected Integer HelperCreateDTO(Session session) {

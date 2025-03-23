@@ -1,9 +1,10 @@
 package org.example.model.DAO.products;
 
+import org.example.model.DAO.AbstractDAO;
 import org.example.model.DTO.products.EBookDTO;
 import org.hibernate.SessionFactory;
 
-public class EBookDAO extends AbstractDAO<EBookDTO> {
+public class EBookDAO extends AbstractProductDAO<EBookDTO> {
 
     public EBookDAO(SessionFactory sessionFactory) {
         super(sessionFactory);

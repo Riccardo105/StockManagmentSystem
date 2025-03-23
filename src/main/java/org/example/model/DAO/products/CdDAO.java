@@ -1,9 +1,10 @@
 package org.example.model.DAO.products;
 
+import org.example.model.DAO.AbstractDAO;
 import org.example.model.DTO.products.CdDTO;
 import org.hibernate.SessionFactory;
 
-public class CdDAO extends AbstractDAO<CdDTO> {
+public class CdDAO extends AbstractProductDAO<CdDTO> {
 
     public CdDAO(SessionFactory sessionFactory) {
         super(sessionFactory);

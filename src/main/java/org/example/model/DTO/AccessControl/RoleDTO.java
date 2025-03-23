@@ -1,4 +1,4 @@
-package org.example.model.DTO.user;
+package org.example.model.DTO.AccessControl;
 
 import javax.persistence.*;
 
@@ -9,34 +9,42 @@ public class RoleDTO {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
-    private String parentRole;
+
+    @ManyToOne
+    @JoinColumn(name = "parentRoleId")
+    private RoleDTO parentRole;
+
+    public RoleDTO() {}
 
     public RoleDTO(String name){
         this.name = name;
     }
 
-    public RoleDTO(String name, String parentRole) {
+    public RoleDTO(String name, RoleDTO parentRole) {
         this.name = name;
         this.parentRole = parentRole;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
     public int getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getParentRole() {
-        return parentRole;
+    public String getName() {
+        return name;
     }
 
-    public void setParentRole(String parentRole) {
+    public void setParentRole(RoleDTO parentRole) {
         this.parentRole = parentRole;
+    }
+
+    public RoleDTO getParentRole() {
+        return parentRole;
     }
 }

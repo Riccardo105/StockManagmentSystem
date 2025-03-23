@@ -1,4 +1,4 @@
-package org.example.model.DTO.user;
+package org.example.model.DTO.AccessControl;
 
 import javax.persistence.*;
 
@@ -10,8 +10,15 @@ public class ResourceDTO {
     private int id;
     private String name;
 
+    public ResourceDTO() {}
+
     public ResourceDTO(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "ResourceDTO{" + "name='" + name + '\'' + '}';
     }
 
     public int getId() {

@@ -1,6 +1,6 @@
-package org.example.DTO.user;
+package org.example.DTO.AccessControl;
 
-import org.example.model.DTO.user.UserDTO;
+import org.example.model.DTO.AccessControl.UserDTO;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

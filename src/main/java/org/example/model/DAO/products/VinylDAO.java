@@ -1,9 +1,10 @@
 package org.example.model.DAO.products;
 
+import org.example.model.DAO.AbstractDAO;
 import org.example.model.DTO.products.VinylDTO;
 import org.hibernate.SessionFactory;
 
-public class VinylDAO extends AbstractDAO<VinylDTO> {
+public class VinylDAO extends AbstractProductDAO<VinylDTO> {
 
     public VinylDAO(SessionFactory sessionFactory) {
         super(sessionFactory);

@@ -1,7 +1,7 @@
 package org.example.DAO.products;
 
-import org.example.model.DAO.products.DigitalDAO;
-import org.example.model.DTO.products.DigitalDTO;
+import org.example.model.DAO.products.VinylDAO;
+import org.example.model.DTO.products.VinylDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.Test;
@@ -12,10 +12,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class DigitalDAOUnitTest extends AbstractDAOUnitTest<DigitalDTO> {
+public class VinylDAOIntegrationTest extends AbstractDAOIntegrationTest<VinylDTO> {
 
     protected Integer HelperCreateDTO(Session session) {
-        DigitalDTO digital = new DigitalDTO.Builder()
+        VinylDTO vinyl = new VinylDTO.Builder()
                 .setTitle("Test title")
                 .setBuyingPrice(10.0f)
                 .setStock(10)
@@ -27,19 +27,19 @@ public class DigitalDAOUnitTest extends AbstractDAOUnitTest<DigitalDTO> {
                 .setReleaseDate(java.sql.Date.valueOf("2023-10-15"))
                 .setPlayTime(java.sql.Time.valueOf("01:10:00"))
                 .setTracksNum(10)
-                .setFileFormat("Test file format")
-                .setFileSize(100.0f)
-                .setBitrateMbps(100)
+                .setRpm(100)
+                .setSize(10)
+                .setEdition("Test edition")
                 .build();
 
         Transaction tx = session.beginTransaction();
-        Integer generatedId = (Integer) session.save(digital);
+        Integer generatedId = (Integer) session.save(vinyl);
         tx.commit();
 
         return generatedId;
     }
 
-    protected void HelperDeleteDTO(Session session, DigitalDTO dto) {
+    protected void HelperDeleteDTO(Session session, VinylDTO dto) {
         Transaction tx = session.beginTransaction();
         session.delete(dto);
         tx.commit();
@@ -49,8 +49,8 @@ public class DigitalDAOUnitTest extends AbstractDAOUnitTest<DigitalDTO> {
     @Test
     @Override
     public void testCreate() {
-        DigitalDAO digitalDAO = new DigitalDAO(sessionFactory);
-        DigitalDTO digital = new DigitalDTO.Builder()
+        VinylDAO vinylDAO = new VinylDAO(sessionFactory);
+        VinylDTO vinyl = new VinylDTO.Builder()
                 .setTitle("Test title")
                 .setBuyingPrice(10.0f)
                 .setStock(10)
@@ -62,35 +62,35 @@ public class DigitalDAOUnitTest extends AbstractDAOUnitTest<DigitalDTO> {
                 .setReleaseDate(java.sql.Date.valueOf("2023-10-15"))
                 .setPlayTime(java.sql.Time.valueOf("01:10:00"))
                 .setTracksNum(10)
-                .setFileFormat("Test file format")
-                .setFileSize(100.0f)
-                .setBitrateMbps(100)
+                .setRpm(100)
+                .setSize(10)
+                .setEdition("Test edition")
                 .build();
 
 
-        Integer generatedId = digitalDAO.create(digital);
+        Integer generatedId = vinylDAO.create(vinyl);
 
         Session session = sessionFactory.openSession();
 
         Transaction tx = session.beginTransaction();
-        DigitalDTO dto = session.get(DigitalDTO.class, generatedId);
+        VinylDTO dto = session.get(VinylDTO.class, generatedId);
         tx.commit();
         session.close();
 
         // entry is deleted regardless of assertion
         HelperDeleteDTO(sessionFactory.openSession(), dto);
 
-        System.out.println("Expected title: " + digital.getTitle());
+        System.out.println("Expected title: " + vinyl.getTitle());
         System.out.println("Actual title: " + dto.getTitle());
-        assertEquals(digital.getTitle(), dto.getTitle());
+        assertEquals(vinyl.getTitle(), dto.getTitle());
 
-        System.out.println("Expected artist: " + digital.getArtist());
+        System.out.println("Expected artist: " + vinyl.getArtist());
         System.out.println("Actual artist: " + dto.getArtist());
-        assertEquals(digital.getArtist(), dto.getArtist());
+        assertEquals(vinyl.getArtist(), dto.getArtist());
 
-        System.out.println("Expected file format: " + digital.getFileFormat());
-        System.out.println("Actual file format: " + dto.getFileFormat());
-        assertEquals(digital.getFileFormat(), dto.getFileFormat());
+        System.out.println("Expected rpm: " + vinyl.getRpm());
+        System.out.println("Actual rpm: " + dto.getRpm());
+        assertEquals(vinyl.getRpm(), dto.getRpm());
 
     }
 
@@ -98,40 +98,40 @@ public class DigitalDAOUnitTest extends AbstractDAOUnitTest<DigitalDTO> {
     @Override
     public void testRead() {
         Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
-        DigitalDAO digitalDAO = new DigitalDAO(sessionFactory);
-        DigitalDTO digital = digitalDAO.read(generatedId);
+        VinylDAO vinylDAO = new VinylDAO(sessionFactory);
+        VinylDTO vinyl = vinylDAO.read(generatedId);
 
         // entry is deleted regardless of assertion
-        HelperDeleteDTO(sessionFactory.openSession(), digital);
+        HelperDeleteDTO(sessionFactory.openSession(), vinyl);
 
         System.out.println("Expected title: Test title");
-        System.out.println("Actual title: " + digital.getTitle());
-        assertEquals("Test title", digital.getTitle());
+        System.out.println("Actual title: " + vinyl.getTitle());
+        assertEquals("Test title", vinyl.getTitle());
 
         System.out.println("Expected artist: Test artist");
-        System.out.println("Actual artist: " + digital.getArtist());
-        assertEquals("Test artist", digital.getArtist());
+        System.out.println("Actual artist: " + vinyl.getArtist());
+        assertEquals("Test artist", vinyl.getArtist());
 
-        System.out.println("Expected file format: Test file format");
-        System.out.println("Actual file format: " + digital.getFileFormat());
-        assertEquals("Test file format", digital.getFileFormat());
+        System.out.println("Expected rpm: 100");
+        System.out.println("Actual rpm: " + vinyl.getRpm());
+        assertEquals(100, vinyl.getRpm());
     }
 
     @Test
     @Override
     public void testUpdate() {
         Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
-        DigitalDAO digitalDAO = new DigitalDAO(sessionFactory);
+        VinylDAO vinylDAO = new VinylDAO(sessionFactory);
         Session session = sessionFactory.openSession();
 
-        DigitalDTO dto = session.get(DigitalDTO.class, generatedId);
+        VinylDTO dto = session.get(VinylDTO.class, generatedId);
         dto.updateStock(15);
 
-        digitalDAO.update(dto);
+        vinylDAO.update(dto);
 
         session.refresh(dto);
 
-        DigitalDTO updatedDto = session.get(DigitalDTO.class, generatedId);
+        VinylDTO updatedDto = session.get(VinylDTO.class, generatedId);
 
         session.close();
 
@@ -149,26 +149,26 @@ public class DigitalDAOUnitTest extends AbstractDAOUnitTest<DigitalDTO> {
     public void testUpdateList() {
         Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
         Integer generatedId2 = HelperCreateDTO(sessionFactory.openSession());
-        DigitalDAO digitalDAO = new DigitalDAO(sessionFactory);
+        VinylDAO vinylDAO = new VinylDAO(sessionFactory);
         Session session = sessionFactory.openSession();
 
-        DigitalDTO dto = session.get(DigitalDTO.class, generatedId);
-        DigitalDTO dto2 = session.get(DigitalDTO.class, generatedId2);
+        VinylDTO dto = session.get(VinylDTO.class, generatedId);
+        VinylDTO dto2 = session.get(VinylDTO.class, generatedId2);
 
         dto.updateStock(15);
         dto2.updateStock(15);
 
-        List<DigitalDTO> updatedDtos = new ArrayList<>();
+        List<VinylDTO> updatedDtos = new ArrayList<>();
         updatedDtos.add(dto);
         updatedDtos.add(dto2);
 
-        digitalDAO.update(updatedDtos);
+        vinylDAO.update(updatedDtos);
 
         session.refresh(dto);
         session.refresh(dto2);
 
-        DigitalDTO updatedDto = session.get(DigitalDTO.class, generatedId);
-        DigitalDTO updatedDto2 = session.get(DigitalDTO.class, generatedId2);
+        VinylDTO updatedDto = session.get(VinylDTO.class, generatedId);
+        VinylDTO updatedDto2 = session.get(VinylDTO.class, generatedId2);
 
         HelperDeleteDTO(sessionFactory.openSession(), dto);
         HelperDeleteDTO(sessionFactory.openSession(), updatedDto2);
@@ -189,23 +189,23 @@ public class DigitalDAOUnitTest extends AbstractDAOUnitTest<DigitalDTO> {
     @Override
     public void testDelete() {
         Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
-        DigitalDAO digitalDAO = new DigitalDAO(sessionFactory);
+        VinylDAO vinylDAO = new VinylDAO(sessionFactory);
 
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
 
-        DigitalDTO digitalToDelete = session.get(DigitalDTO.class, generatedId);
-        if (digitalToDelete != null) {
-            digitalDAO.delete(digitalToDelete);
+        VinylDTO vinylToDelete = session.get(VinylDTO.class, generatedId);
+        if (vinylToDelete != null) {
+            vinylDAO.delete(vinylToDelete);
         }
 
         tx.commit();
         session.close();
 
-        DigitalDTO deletedDigital = digitalDAO.read(generatedId);
+        VinylDTO deletedVinyl = vinylDAO.read(generatedId);
 
         System.out.println("Expected object: null");
-        System.out.println("Actual object: " + deletedDigital);
-        assertNull(deletedDigital);
+        System.out.println("Actual object: " + deletedVinyl);
+        assertNull(deletedVinyl);
     }
 }

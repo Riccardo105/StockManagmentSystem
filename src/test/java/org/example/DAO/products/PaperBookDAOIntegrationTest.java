@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PaperBookDAOUnitTest extends AbstractDAOUnitTest<PaperBookDTO> {
+public class PaperBookDAOIntegrationTest extends AbstractDAOIntegrationTest<PaperBookDTO> {
 
     protected Integer HelperCreateDTO(Session session){
         PaperBookDTO ebook = new PaperBookDTO.Builder()

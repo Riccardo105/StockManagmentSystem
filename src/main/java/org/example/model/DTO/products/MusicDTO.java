@@ -14,7 +14,7 @@ import java.sql.Time;
 @PrimaryKeyJoinColumn(name = "id")
 public abstract class MusicDTO extends ProductDTO {
         private String format;
-        private String Artist;
+        private String artist;
         private String label;
         private String genre;
         private Date releaseDate;
@@ -27,7 +27,7 @@ public abstract class MusicDTO extends ProductDTO {
         protected MusicDTO(Builder<?> builder) {
             super(builder);
             this.format = builder.format;
-            this.Artist = builder.Artist;
+            this.artist = builder.artist;
             this.label = builder.label;
             this.genre = builder.genre;
             this.releaseDate = builder.releaseDate;
@@ -41,7 +41,7 @@ public abstract class MusicDTO extends ProductDTO {
         };
 
         public String getArtist() {
-            return Artist;
+            return artist;
         };
 
         public String getLabel() {
@@ -66,7 +66,7 @@ public abstract class MusicDTO extends ProductDTO {
 
         public abstract static class Builder<T extends Builder<T> > extends ProductDTO.Builder<T> {
             private String format;
-            private String Artist;
+            private String artist;
             private String label;
             private String genre;
             private Date releaseDate;
@@ -78,8 +78,8 @@ public abstract class MusicDTO extends ProductDTO {
                 return self();
             };
 
-            public T setArtist(String Artist) {
-                this.Artist = Artist;
+            public T setArtist(String artist) {
+                this.artist = artist;
                 return self();
             };
 

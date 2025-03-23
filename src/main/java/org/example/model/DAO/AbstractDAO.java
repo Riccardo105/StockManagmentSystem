@@ -1,4 +1,4 @@
-package org.example.model.DAO.products;
+package org.example.model.DAO;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -7,7 +7,7 @@ import org.hibernate.Transaction;
 import java.util.List;
 
 public abstract class AbstractDAO<T> {
-    private final SessionFactory sessionFactory;
+    protected final SessionFactory sessionFactory;
 
     public AbstractDAO( SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -21,20 +21,18 @@ public abstract class AbstractDAO<T> {
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
 
-            // Save the object and get the generated ID
             generatedId = (Integer) session.save(dto);
 
-            // Commit the transaction
             tx.commit();
         } catch (Exception e) {
-            // Roll back the transaction if an exception occurs
+
             if (tx != null) {
                 tx.rollback();
             }
-            // Log the exception or rethrow it
+
             throw new RuntimeException("Failed to insert the entity", e);
         } finally {
-            // Close the session in the finally block
+
             if (session != null) {
                 session.close();
             }
@@ -49,21 +47,19 @@ public abstract class AbstractDAO<T> {
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
 
-            // Perform the read operation
             T dto = session.get(getDTOClass(), id);
 
-            // Commit the transaction
             tx.commit();
             return dto;
         } catch (Exception e) {
-            // Roll back the transaction if an exception occurs
+
             if (tx != null && tx.isActive()) {
                 tx.rollback();
             }
-            // Log the exception or rethrow it
+
             throw new RuntimeException("Failed to read the entity", e);
         } finally {
-            // Close the session in the finally block
+
             if (session != null && session.isOpen()) {
                 session.close();
             }
@@ -74,55 +70,22 @@ public abstract class AbstractDAO<T> {
         Session session = null;
         Transaction tx = null;
         try {
-            // Open a session and begin a transaction
+
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
 
-            // Perform the update operation
             session.update(dto);
 
-            // Commit the transaction
             tx.commit();
         } catch (Exception e) {
-            // Roll back the transaction in case of an exception
+
             if (tx != null && tx.isActive()) {
                 tx.rollback();
             }
-            // Log the exception or rethrow it as a custom exception
+
             throw new RuntimeException("Failed to update the entity", e);
         } finally {
-            // Close the session in the finally block to ensure it's always closed
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
 
-    }
-
-    public void update (List<T> dtos) {
-        Session session = null;
-        Transaction tx = null;
-
-        try{
-            // Open a session and begin a transaction
-            session = sessionFactory.openSession();
-            tx = session.beginTransaction();
-
-            // Perform the update operation
-            for (T dto : dtos) {
-                session.update(dto);
-            }
-            // Commit the transaction
-            tx.commit();
-        }catch (Exception e) {
-            // Roll back the transaction in case of an exception
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
-            }
-            // Log the exception or rethrow it as a custom exception
-            throw new RuntimeException("Failed to update the entity", e);
-        }finally{
-            // Close the session in the finally block to ensure it's always closed
             if (session != null && session.isOpen()) {
                 session.close();
             }
@@ -134,24 +97,22 @@ public abstract class AbstractDAO<T> {
         Session session = null;
         Transaction tx = null;
         try{
-            // Open a session and begin a transaction
+
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
 
-            // perform delete operation
             session.delete(dto);
 
-            // Commit the transaction
             tx.commit();
         }catch (Exception e) {
-            // Roll back the transaction if an exception occurs
+
             if (tx != null && tx.isActive()) {
                 tx.rollback();
             }
-            // Log the exception or rethrow it
+
             throw new RuntimeException("Failed to delete the entity", e);
         }finally{
-            // Close the session in the finally block to ensure it's always closed
+
             if (session != null && session.isOpen()) {
                 session.close();
             }
@@ -161,7 +122,6 @@ public abstract class AbstractDAO<T> {
     /**
      *
      * @return *subclass corresponding DTO class type.*
-     *
      * This is required by the read operation (see above) due to java's runtime type erasure.
      * Due to erasure java defaults all type generics (T) to "Object" at runtime if not provided with a type.
      * Thus, each subclass needs to set its corresponding DTO class type so that the object of correct type can be read

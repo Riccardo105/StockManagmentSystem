@@ -1,4 +1,4 @@
-package org.example.model.DTO.user;
+package org.example.model.DTO.AccessControl;
 
 import javax.persistence.*;
 
@@ -38,9 +38,4 @@ public class RolePermissionsDTO {
     public PermissionsDTO getPermission() {
         return permission;
     }
-
-
-
-
-
 }

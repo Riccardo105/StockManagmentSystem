@@ -1,4 +1,4 @@
-package org.example.model.DTO.user;
+package org.example.model.DTO.AccessControl;
 
 import javax.persistence.*;
 

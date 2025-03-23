@@ -1,9 +1,8 @@
-package org.example.model.DTO.user;
+package org.example.model.DTO.AccessControl;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import org.example.model.DTO.products.ProductDTO;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -62,11 +61,11 @@ public class UserDTO {
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", activated='" + activated + '\'' +
+                ", activated=" + activated +
                 '}';
     }
 
-    protected UserDTO() {}
+    public UserDTO() {}
 
     protected UserDTO(Builder builder) {
         this.firstName = builder.firstName;

@@ -1,7 +1,6 @@
 package org.example.DAO.products;
-
-import org.example.model.DAO.products.CdDAO;
-import org.example.model.DTO.products.CdDTO;
+import org.example.model.DAO.products.AudioBookDAO;
+import org.example.model.DTO.products.AudioBookDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.Test;
@@ -12,35 +11,35 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class CdDAOUnitTest extends AbstractDAOUnitTest<CdDTO> {
 
-    protected Integer HelperCreateDTO(Session session) {
-        CdDTO cd = new CdDTO.Builder()
+public class AudioBookDAOIntegrationTest extends AbstractDAOIntegrationTest<AudioBookDTO> {
+
+    protected Integer HelperCreateDTO(Session session){
+        AudioBookDTO audioBook = new AudioBookDTO.Builder()
                 .setTitle("Test title")
                 .setBuyingPrice(10.0f)
                 .setStock(10)
                 .setSellingPrice(10.0f)
                 .setFormat("Test format")
-                .setArtist("Test artist")
-                .setLabel("Test label")
+                .setAuthor("Test author")
+                .setPublisher("Test publisher")
                 .setGenre("Test genre")
+                .setSeries("Test series")
                 .setReleaseDate(java.sql.Date.valueOf("2023-10-15"))
-                .setPlayTime(java.sql.Time.valueOf("01:10:00"))
-                .setTracksNum(10)
-                .setNumOfDiscs(10)
-                .setConditions("Test condition")
-                .setBitrateMbps(10)
+                .setNarrator("test narrator")
+                .setFileSize(10.0f)
+                .setFileFormat("Test File Format")
                 .build();
 
         Transaction tx = session.beginTransaction();
-        Integer generatedId = (Integer) session.save(cd);
+        Integer generatedId = (Integer) session.save(audioBook);
         tx.commit();
 
         return generatedId;
     }
 
 
-    protected void HelperDeleteDTO(Session session, CdDTO dto) {
+    protected void HelperDeleteDTO( Session session, AudioBookDTO dto) {
         Transaction tx = session.beginTransaction();
         session.delete(dto);
         tx.commit();
@@ -50,90 +49,89 @@ public class CdDAOUnitTest extends AbstractDAOUnitTest<CdDTO> {
     @Test
     @Override
     public void testCreate() {
-        CdDAO cdDAO = new CdDAO(sessionFactory);
-        CdDTO cd = new CdDTO.Builder()
+        AudioBookDAO audioBookDAO = new AudioBookDAO(sessionFactory);
+        AudioBookDTO audioBook = new AudioBookDTO.Builder()
                 .setTitle("Test title")
                 .setBuyingPrice(10.0f)
                 .setStock(10)
                 .setSellingPrice(10.0f)
                 .setFormat("Test format")
-                .setArtist("Test artist")
-                .setLabel("Test label")
+                .setAuthor("Test Author")
+                .setPublisher("Test publisher")
                 .setGenre("Test genre")
+                .setSeries("Test series")
                 .setReleaseDate(java.sql.Date.valueOf("2023-10-15"))
-                .setPlayTime(java.sql.Time.valueOf("01:10:00"))
-                .setTracksNum(10)
-                .setNumOfDiscs(10)
-                .setConditions("Test condition")
-                .setBitrateMbps(10)
+                .setNarrator("test narrator")
+                .setFileSize(10.0f)
+                .setFileFormat("Test File Format")
                 .build();
 
 
-        Integer generatedId = cdDAO.create(cd);
+        Integer generatedId = audioBookDAO.create(audioBook);
 
         Session session = sessionFactory.openSession();
 
         Transaction tx = session.beginTransaction();
-        CdDTO dto = session.get(CdDTO.class, generatedId);
+        AudioBookDTO dto = session.get(AudioBookDTO.class, generatedId);
         tx.commit();
         session.close();
 
         // entry is deleted regardless of assertion
         HelperDeleteDTO(sessionFactory.openSession(), dto);
 
-        System.out.println("Expected title: " + cd.getTitle());
+        System.out.println("Expected title: " + audioBook.getTitle());
         System.out.println("Actual title: " + dto.getTitle());
-        assertEquals(cd.getTitle(), dto.getTitle());
+        assertEquals(audioBook.getTitle(), dto.getTitle());
 
-        System.out.println("Expected artist: " + cd.getArtist());
-        System.out.println("Actual artist: " + dto.getArtist());
-        assertEquals(cd.getArtist(), dto.getArtist());
+        System.out.println("Expected author: " + audioBook.getAuthor());
+        System.out.println("Actual author: " + dto.getAuthor());
+        assertEquals(audioBook.getAuthor(), dto.getAuthor());
 
-        System.out.println("Expected numOfDiscs: " + cd.getNumOfDiscs());
-        System.out.println("Actual numOfDiscs: " + dto.getNumOfDiscs());
-        assertEquals(cd.getNumOfDiscs(), dto.getNumOfDiscs());
+        System.out.println("Expected narrator: " + audioBook.getNarrator());
+        System.out.println("Actual narrator: " + dto.getNarrator());
+        assertEquals(audioBook.getNarrator(), dto.getNarrator());
 
 
     }
 
     @Test
     @Override
-    public void testRead() {
+    public void testRead(){
         Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
-        CdDAO cdDAO = new CdDAO(sessionFactory);
-        CdDTO cd = cdDAO.read(generatedId);
+        AudioBookDAO audioBookDAO = new AudioBookDAO(sessionFactory);
+        AudioBookDTO audioBook = audioBookDAO.read( generatedId);
 
         // entry is deleted regardless of assertion
-        HelperDeleteDTO(sessionFactory.openSession(), cd);
+        HelperDeleteDTO(sessionFactory.openSession(), audioBook);
 
         System.out.println("Expected title: Test title");
-        System.out.println("Actual title: " + cd.getTitle());
-        assertEquals("Test title", cd.getTitle());
+        System.out.println("Actual title: " + audioBook.getTitle());
+        assertEquals("Test title", audioBook.getTitle());
 
-        System.out.println("Expected artist: Test artist");
-        System.out.println("Actual artist: " + cd.getArtist());
-        assertEquals("Test artist", cd.getArtist());
+        System.out.println("Expected author: Test author");
+        System.out.println("Actual author: " + audioBook.getAuthor());
+        assertEquals("Test author", audioBook.getAuthor());
 
-        System.out.println("Expected numOfDiscs: 10");
-        System.out.println("Actual numOfDiscs: " + cd.getNumOfDiscs());
-        assertEquals(10, cd.getNumOfDiscs());
+        System.out.println("Expected narrator: test narrator");
+        System.out.println("Actual narrator: " + audioBook.getNarrator());
+        assertEquals("test narrator", audioBook.getNarrator());
     }
 
     @Test
     @Override
     public void testUpdate() {
         Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
-        CdDAO cdDAO = new CdDAO(sessionFactory);
+        AudioBookDAO audioBookDAO = new AudioBookDAO(sessionFactory);
         Session session = sessionFactory.openSession();
 
-        CdDTO dto = session.get(CdDTO.class, generatedId);
+        AudioBookDTO dto = session.get(AudioBookDTO.class, generatedId);
         dto.updateStock(15);
 
-        cdDAO.update(dto);
+        audioBookDAO.update(dto);
 
         session.refresh(dto);
 
-        CdDTO updatedDto = session.get(CdDTO.class, generatedId);
+        AudioBookDTO updatedDto = session.get(AudioBookDTO.class, generatedId);
         session.close();
 
         // entry is deleted regardless of assertion
@@ -151,26 +149,26 @@ public class CdDAOUnitTest extends AbstractDAOUnitTest<CdDTO> {
     public void testUpdateList() {
         Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
         Integer generatedId2 = HelperCreateDTO(sessionFactory.openSession());
-        CdDAO cdDAO = new CdDAO(sessionFactory);
+        AudioBookDAO audioBookDAO = new AudioBookDAO(sessionFactory);
         Session session = sessionFactory.openSession();
 
-        CdDTO dto = session.get(CdDTO.class, generatedId);
-        CdDTO dto2 = session.get(CdDTO.class, generatedId2);
+        AudioBookDTO dto = session.get(AudioBookDTO.class, generatedId);
+        AudioBookDTO dto2 = session.get(AudioBookDTO.class, generatedId2);
 
         dto.updateStock(15);
         dto2.updateStock(15);
 
-        List<CdDTO> updatedDtos = new ArrayList<>();
+        List<AudioBookDTO> updatedDtos = new ArrayList<>();
         updatedDtos.add(dto);
         updatedDtos.add(dto2);
 
-        cdDAO.update(updatedDtos);
+        audioBookDAO.update(updatedDtos);
 
         session.refresh(dto);
         session.refresh(dto2);
 
-        CdDTO updatedDto = session.get(CdDTO.class, generatedId);
-        CdDTO updatedDto2 = session.get(CdDTO.class, generatedId2);
+        AudioBookDTO updatedDto = session.get(AudioBookDTO.class, generatedId);
+        AudioBookDTO updatedDto2 = session.get(AudioBookDTO.class, generatedId2);
 
         HelperDeleteDTO(sessionFactory.openSession(), dto);
         HelperDeleteDTO(sessionFactory.openSession(), dto2);
@@ -192,23 +190,25 @@ public class CdDAOUnitTest extends AbstractDAOUnitTest<CdDTO> {
     @Override
     public void testDelete() {
         Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
-        CdDAO cdDAO = new CdDAO(sessionFactory);
+        AudioBookDAO audioBookDAO = new AudioBookDAO(sessionFactory);
 
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
 
-        CdDTO cdToDelete = session.get(CdDTO.class, generatedId);
-        if (cdToDelete != null) {
-            cdDAO.delete(cdToDelete);
+        AudioBookDTO audioBookToDelete = session.get(AudioBookDTO.class, generatedId);
+        if (audioBookToDelete != null) {
+            audioBookDAO.delete(audioBookToDelete);
         }
 
         tx.commit();
         session.close();
 
-        CdDTO deletedCd = cdDAO.read(generatedId);
+        AudioBookDTO deletedAudioBook = audioBookDAO.read(generatedId);
 
         System.out.println("Expected object: null");
-        System.out.println("Actual object: " + deletedCd);
-        assertNull(deletedCd);
+        System.out.println("Actual object: " + deletedAudioBook);
+        assertNull(deletedAudioBook);
+
+
     }
 }

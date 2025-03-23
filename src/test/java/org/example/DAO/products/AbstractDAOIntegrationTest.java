@@ -8,7 +8,7 @@ import org.junit.jupiter.api.*;
  * for tests sessionFactory is connection to Testing instance of the database
  * @param <T> takes in the DAO's corresponding DTO
  */
-public abstract class AbstractDAOUnitTest<T> {
+public abstract class AbstractDAOIntegrationTest<T> {
     protected static SessionFactory sessionFactory;
     protected Session session;
 

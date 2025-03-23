@@ -1,9 +1,13 @@
-package org.example.model.DTO.user;
+package org.example.model.DTO.AccessControl;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * this embeddable class is used by hibernate to construct and manage
+ * the composite primary key in the rolePermissions table
+ */
 @Embeddable
 public class RolePermissionsId implements Serializable {
     private int roleId;
