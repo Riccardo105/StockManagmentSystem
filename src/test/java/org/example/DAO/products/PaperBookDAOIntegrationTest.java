@@ -1,5 +1,7 @@
 package org.example.DAO.products;
+import org.example.model.DAO.products.EBookDAO;
 import org.example.model.DAO.products.PaperBookDAO;
+import org.example.model.DTO.products.EBookDTO;
 import org.example.model.DTO.products.PaperBookDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PaperBookDAOIntegrationTest extends AbstractDAOIntegrationTest<PaperBookDTO> {
+public class PaperBookDAOIntegrationTest extends ProductAbstractDAOIntegrationTest<PaperBookDTO> {
 
     protected Integer HelperCreateDTO(Session session){
         PaperBookDTO ebook = new PaperBookDTO.Builder()
@@ -204,7 +206,39 @@ public class PaperBookDAOIntegrationTest extends AbstractDAOIntegrationTest<Pape
         System.out.println("Expected object: null");
         System.out.println("Actual object: " + deletedPaperBook);
         assertNull(deletedPaperBook);
+    }
+
+    @Test
+    public void testDeleteList() {
+        Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
+        Integer generatedId2 = HelperCreateDTO(sessionFactory.openSession());
+        PaperBookDAO paperBookDAO = new PaperBookDAO(sessionFactory);
+
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        PaperBookDTO paperBookToDelete1 = session.get(PaperBookDTO.class, generatedId);
+        PaperBookDTO paperBookToDelete2 = session.get(PaperBookDTO.class, generatedId2);
+
+        ArrayList<PaperBookDTO> paperBookToDelete = new ArrayList<>();
+        paperBookToDelete.add(paperBookToDelete1);
+        paperBookToDelete.add(paperBookToDelete2);
+
+        paperBookDAO.delete(paperBookToDelete);
+
+        tx.commit();
+        session.close();
+
+        PaperBookDTO deletedPaperBook1 = paperBookDAO.read(generatedId);
+        PaperBookDTO deletedPaperBook2 = paperBookDAO.read(generatedId2);
 
 
+        System.out.println("Expected object: null");
+        System.out.println("Actual object: " + deletedPaperBook1);
+        assertNull(deletedPaperBook1);
+
+        System.out.println("Expected object: null");
+        System.out.println("Actual object: " + deletedPaperBook2);
+        assertNull(deletedPaperBook2);
     }
 }

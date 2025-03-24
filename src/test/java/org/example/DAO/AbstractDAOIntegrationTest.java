@@ -1,4 +1,4 @@
-package org.example.DAO.products;
+package org.example.DAO;
 import org.example.config.DbConnection;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -59,8 +59,9 @@ public abstract class AbstractDAOIntegrationTest<T> {
      */
     public abstract void testRead();
     public abstract void testDelete();
+    public abstract void testDeleteList();
     public abstract void testUpdate();
-    public abstract void testUpdateList();
+
 
 
 }

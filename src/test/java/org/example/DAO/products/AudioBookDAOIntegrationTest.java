@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 
-public class AudioBookDAOIntegrationTest extends AbstractDAOIntegrationTest<AudioBookDTO> {
+public class AudioBookDAOIntegrationTest extends ProductAbstractDAOIntegrationTest<AudioBookDTO> {
 
     protected Integer HelperCreateDTO(Session session){
         AudioBookDTO audioBook = new AudioBookDTO.Builder()
@@ -208,7 +208,39 @@ public class AudioBookDAOIntegrationTest extends AbstractDAOIntegrationTest<Audi
         System.out.println("Expected object: null");
         System.out.println("Actual object: " + deletedAudioBook);
         assertNull(deletedAudioBook);
+    }
+
+    @Test
+    public void testDeleteList() {
+        Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
+        Integer generatedId2 = HelperCreateDTO(sessionFactory.openSession());
+        AudioBookDAO audioBookDAO = new AudioBookDAO(sessionFactory);
+
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        AudioBookDTO audioBookToDelete1 = session.get(AudioBookDTO.class, generatedId);
+        AudioBookDTO audioBookToDelete2 = session.get(AudioBookDTO.class, generatedId2);
+
+        ArrayList<AudioBookDTO> audioBooksToDelete = new ArrayList<>();
+        audioBooksToDelete.add(audioBookToDelete1);
+        audioBooksToDelete.add(audioBookToDelete2);
+
+        audioBookDAO.delete(audioBooksToDelete);
+
+        tx.commit();
+        session.close();
+
+        AudioBookDTO deletedAudioBook1 = audioBookDAO.read(generatedId);
+        AudioBookDTO deletedAudioBook2 = audioBookDAO.read(generatedId2);
 
 
+        System.out.println("Expected object: null");
+        System.out.println("Actual object: " + deletedAudioBook1);
+        assertNull(deletedAudioBook1);
+
+        System.out.println("Expected object: null");
+        System.out.println("Actual object: " + deletedAudioBook2);
+        assertNull(deletedAudioBook2);
     }
 }

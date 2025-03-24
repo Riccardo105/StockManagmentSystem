@@ -1,5 +1,7 @@
 package org.example.DAO.products;
+import org.example.model.DAO.products.DigitalDAO;
 import org.example.model.DAO.products.EBookDAO;
+import org.example.model.DTO.products.DigitalDTO;
 import org.example.model.DTO.products.EBookDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -14,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /* throughout the tests, the sessionFactory passed to the DAO is taken from
    the @BeforeAll in the AbstractDAUnitTest
  */
-public class EBookDAOIntegrationTest extends AbstractDAOIntegrationTest<EBookDTO> {
+public class EBookDAOIntegrationTest extends ProductAbstractDAOIntegrationTest<EBookDTO> {
 
     // session passed by tests
     protected Integer HelperCreateDTO(Session session) {
@@ -210,8 +212,40 @@ public class EBookDAOIntegrationTest extends AbstractDAOIntegrationTest<EBookDTO
         System.out.println("Expected object: null");
         System.out.println("Actual object: " + deletedEbook);
         assertNull(deletedEbook);
+    }
+
+    @Test
+    public void testDeleteList() {
+        Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
+        Integer generatedId2 = HelperCreateDTO(sessionFactory.openSession());
+        EBookDAO eBookDAO = new EBookDAO(sessionFactory);
+
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        EBookDTO eBookToDelete1 = session.get(EBookDTO.class, generatedId);
+        EBookDTO eBookToDelete2 = session.get(EBookDTO.class, generatedId2);
+
+        ArrayList<EBookDTO> eBookToDelete = new ArrayList<>();
+        eBookToDelete.add(eBookToDelete1);
+        eBookToDelete.add(eBookToDelete2);
+
+        eBookDAO.delete(eBookToDelete);
+
+        tx.commit();
+        session.close();
+
+        EBookDTO deletedEBook1 = eBookDAO.read(generatedId);
+        EBookDTO deletedEBook2 = eBookDAO.read(generatedId2);
 
 
+        System.out.println("Expected object: null");
+        System.out.println("Actual object: " + deletedEBook1);
+        assertNull(deletedEBook1);
+
+        System.out.println("Expected object: null");
+        System.out.println("Actual object: " + deletedEBook2);
+        assertNull(deletedEBook2);
     }
 
 }

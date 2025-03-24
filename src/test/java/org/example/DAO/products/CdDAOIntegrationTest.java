@@ -1,6 +1,8 @@
 package org.example.DAO.products;
 
+import org.example.model.DAO.products.AudioBookDAO;
 import org.example.model.DAO.products.CdDAO;
+import org.example.model.DTO.products.AudioBookDTO;
 import org.example.model.DTO.products.CdDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -12,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class CdDAOIntegrationTest extends AbstractDAOIntegrationTest<CdDTO> {
+public class CdDAOIntegrationTest extends ProductAbstractDAOIntegrationTest<CdDTO> {
 
     protected Integer HelperCreateDTO(Session session) {
         CdDTO cd = new CdDTO.Builder()
@@ -210,5 +212,39 @@ public class CdDAOIntegrationTest extends AbstractDAOIntegrationTest<CdDTO> {
         System.out.println("Expected object: null");
         System.out.println("Actual object: " + deletedCd);
         assertNull(deletedCd);
+    }
+
+    @Test
+    public void testDeleteList() {
+        Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
+        Integer generatedId2 = HelperCreateDTO(sessionFactory.openSession());
+        CdDAO cdDAO = new CdDAO(sessionFactory);
+
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        CdDTO cdToDelete1 = session.get(CdDTO.class, generatedId);
+        CdDTO cdToDelete2 = session.get(CdDTO.class, generatedId2);
+
+        ArrayList<CdDTO> cdToDelete = new ArrayList<>();
+        cdToDelete.add(cdToDelete1);
+        cdToDelete.add(cdToDelete2);
+
+        cdDAO.delete(cdToDelete);
+
+        tx.commit();
+        session.close();
+
+        CdDTO deletedCd1 = cdDAO.read(generatedId);
+        CdDTO deletedCd2 = cdDAO.read(generatedId2);
+
+
+        System.out.println("Expected object: null");
+        System.out.println("Actual object: " + deletedCd1);
+        assertNull(deletedCd1);
+
+        System.out.println("Expected object: null");
+        System.out.println("Actual object: " + deletedCd2);
+        assertNull(deletedCd2);
     }
 }

@@ -1,6 +1,8 @@
 package org.example.DAO.products;
 
+import org.example.model.DAO.products.CdDAO;
 import org.example.model.DAO.products.DigitalDAO;
+import org.example.model.DTO.products.CdDTO;
 import org.example.model.DTO.products.DigitalDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -12,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class DigitalDAOIntegrationTest extends AbstractDAOIntegrationTest<DigitalDTO> {
+public class DigitalDAOIntegrationTest extends ProductAbstractDAOIntegrationTest<DigitalDTO> {
 
     protected Integer HelperCreateDTO(Session session) {
         DigitalDTO digital = new DigitalDTO.Builder()
@@ -207,5 +209,39 @@ public class DigitalDAOIntegrationTest extends AbstractDAOIntegrationTest<Digita
         System.out.println("Expected object: null");
         System.out.println("Actual object: " + deletedDigital);
         assertNull(deletedDigital);
+    }
+
+    @Test
+    public void testDeleteList() {
+        Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
+        Integer generatedId2 = HelperCreateDTO(sessionFactory.openSession());
+        DigitalDAO digitalDAO = new DigitalDAO(sessionFactory);
+
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        DigitalDTO digitalToDelete1 = session.get(DigitalDTO.class, generatedId);
+        DigitalDTO digitalToDelete2 = session.get(DigitalDTO.class, generatedId2);
+
+        ArrayList<DigitalDTO> digitalToDelete = new ArrayList<>();
+        digitalToDelete.add(digitalToDelete1);
+        digitalToDelete.add(digitalToDelete2);
+
+        digitalDAO.delete(digitalToDelete);
+
+        tx.commit();
+        session.close();
+
+        DigitalDTO deletedDigital1 = digitalDAO.read(generatedId);
+        DigitalDTO deletedDigital2 = digitalDAO.read(generatedId2);
+
+
+        System.out.println("Expected object: null");
+        System.out.println("Actual object: " + deletedDigital1);
+        assertNull(deletedDigital1);
+
+        System.out.println("Expected object: null");
+        System.out.println("Actual object: " + deletedDigital2);
+        assertNull(deletedDigital2);
     }
 }

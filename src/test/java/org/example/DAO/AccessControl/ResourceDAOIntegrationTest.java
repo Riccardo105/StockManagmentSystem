@@ -1,25 +1,26 @@
 package org.example.DAO.AccessControl;
 
+import org.example.DAO.AbstractDAOIntegrationTest;
 import org.example.model.DTO.AccessControl.OperationDTO;
-import org.example.model.DTO.products.EBookDTO;
+import org.example.model.DTO.AccessControl.ResourceDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.Test;
 
-public class OperationDAOIntegrationTest extends AccessControlAbstractIntegrationTest<OperationDTO> {
+public class ResourceDAOIntegrationTest extends AbstractDAOIntegrationTest<ResourceDTO> {
 
     // session passed by tests
     protected Integer HelperCreateDTO(Session session) {
-       OperationDTO operationDTO = new OperationDTO("Test operation");
+        ResourceDTO resourceDTO = new ResourceDTO("Test resource");
 
         Transaction tx = session.beginTransaction();
-        Integer generatedId = (Integer) session.save(operationDTO);
+        Integer generatedId = (Integer) session.save(resourceDTO);
         tx.commit();
 
         return generatedId;
     }
 
-    protected void HelperDeleteDTO( Session session, OperationDTO dto) {
+    protected void HelperDeleteDTO( Session session, ResourceDTO dto) {
         Transaction tx = session.beginTransaction();
         session.delete(dto);
         tx.commit();
@@ -37,5 +38,5 @@ public class OperationDAOIntegrationTest extends AccessControlAbstractIntegratio
     @Test
     public void testUpdate() {}
     @Test
-    public void readAll() {}
+    public void readAll() {};
 }

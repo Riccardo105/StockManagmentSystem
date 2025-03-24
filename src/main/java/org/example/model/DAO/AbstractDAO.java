@@ -119,6 +119,36 @@ public abstract class AbstractDAO<T> {
         }
     }
 
+    public void delete (List<T> dtos) {
+        Session session = null;
+        Transaction tx = null;
+
+        try{
+
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+
+            for (T dto : dtos) {
+                session.delete(dto);
+            }
+
+            tx.commit();
+        }catch (Exception e) {
+
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+
+            throw new RuntimeException("Failed to update the entity", e);
+        }finally{
+
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+
+    }
+
     /**
      *
      * @return *subclass corresponding DTO class type.*

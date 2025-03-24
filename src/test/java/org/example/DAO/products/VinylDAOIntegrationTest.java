@@ -1,6 +1,8 @@
 package org.example.DAO.products;
 
+import org.example.model.DAO.products.PaperBookDAO;
 import org.example.model.DAO.products.VinylDAO;
+import org.example.model.DTO.products.PaperBookDTO;
 import org.example.model.DTO.products.VinylDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -12,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class VinylDAOIntegrationTest extends AbstractDAOIntegrationTest<VinylDTO> {
+public class VinylDAOIntegrationTest extends ProductAbstractDAOIntegrationTest<VinylDTO> {
 
     protected Integer HelperCreateDTO(Session session) {
         VinylDTO vinyl = new VinylDTO.Builder()
@@ -207,5 +209,39 @@ public class VinylDAOIntegrationTest extends AbstractDAOIntegrationTest<VinylDTO
         System.out.println("Expected object: null");
         System.out.println("Actual object: " + deletedVinyl);
         assertNull(deletedVinyl);
+    }
+
+    @Test
+    public void testDeleteList() {
+        Integer generatedId = HelperCreateDTO(sessionFactory.openSession());
+        Integer generatedId2 = HelperCreateDTO(sessionFactory.openSession());
+        VinylDAO vinylBookDAO = new VinylDAO(sessionFactory);
+
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        VinylDTO vinylToDelete1 = session.get(VinylDTO.class, generatedId);
+        VinylDTO vinylToDelete2 = session.get(VinylDTO.class, generatedId2);
+
+        ArrayList<VinylDTO> vinylToDelete = new ArrayList<>();
+        vinylToDelete.add(vinylToDelete1);
+        vinylToDelete.add(vinylToDelete2);
+
+        vinylBookDAO.delete(vinylToDelete);
+
+        tx.commit();
+        session.close();
+
+        VinylDTO deletedVinyl1 = vinylBookDAO.read(generatedId);
+        VinylDTO deletedVinyl2 = vinylBookDAO.read(generatedId2);
+
+
+        System.out.println("Expected object: null");
+        System.out.println("Actual object: " + deletedVinyl1);
+        assertNull(deletedVinyl1);
+
+        System.out.println("Expected object: null");
+        System.out.println("Actual object: " + deletedVinyl2);
+        assertNull(deletedVinyl2);
     }
 }
