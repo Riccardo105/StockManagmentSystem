@@ -11,11 +11,11 @@ public class PermissionsDTO {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "operation_id")
+    @JoinColumn(name = "operationId")
     private OperationDTO operation;
 
     @ManyToOne
-    @JoinColumn(name = "resource_id")
+    @JoinColumn(name = "resourceId")
     private ResourceDTO resource;
 
     // Constructor

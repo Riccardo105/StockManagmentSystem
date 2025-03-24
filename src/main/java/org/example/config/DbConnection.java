@@ -1,5 +1,6 @@
 package org.example.config;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.example.model.DTO.AccessControl.*;
 import org.example.model.DTO.products.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -24,7 +25,7 @@ public class DbConnection {
                 throw new IllegalStateException("DATABASE_URL is not set");
             }
 
-            // Add entity mappings
+            // Add entities to mapping
             configuration.addAnnotatedClass(ProductDTO.class);
             configuration.addAnnotatedClass(BookDTO.class);
             configuration.addAnnotatedClass(MusicDTO.class);
@@ -34,6 +35,15 @@ public class DbConnection {
             configuration.addAnnotatedClass(CdDTO.class);
             configuration.addAnnotatedClass(DigitalDTO.class);
             configuration.addAnnotatedClass(VinylDTO.class);
+            configuration.addAnnotatedClass(OperationDTO.class);
+            configuration.addAnnotatedClass(ResourceDTO.class);
+            configuration.addAnnotatedClass(UserDTO.class);
+            configuration.addAnnotatedClass(PermissionsDTO.class);
+            configuration.addAnnotatedClass(RoleDTO.class);
+            configuration.addAnnotatedClass(RolePermissionsDTO.class);
+            configuration.addAnnotatedClass(RolePermissionsId.class);
+            configuration.addAnnotatedClass(UserRoleDTO.class);
+            configuration.addAnnotatedClass(UserRoleId.class);
 
             configuration.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
             configuration.setProperty("hibernate.connection.url", databaseURL);

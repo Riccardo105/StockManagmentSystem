@@ -139,6 +139,8 @@ public class AudioBookDAOIntegrationTest extends ProductAbstractDAOIntegrationTe
 
         System.out.println("Expected stock: " + dto.getStock());
         System.out.println("Actual stock: " + updatedDto.getStock());
+
+
         assertEquals(updatedDto.getStock(), dto.getStock());
 
 

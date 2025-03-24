@@ -12,8 +12,8 @@ import java.util.Objects;
  */
 @Embeddable
 public class UserRoleId implements Serializable {
-    private int userId;
-    private int roleId;
+    private Integer userId;
+    private Integer roleId;
 
     public UserRoleId() {}
 

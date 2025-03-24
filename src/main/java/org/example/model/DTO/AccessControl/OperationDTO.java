@@ -26,11 +26,11 @@ public class OperationDTO {
         return id;
     }
 
-    public String getOperation() {
+    public String getName() {
         return name;
     }
 
-    public void setOperation(String operation) {
+    public void setName(String operation) {
         this.name = operation;
     }
 }

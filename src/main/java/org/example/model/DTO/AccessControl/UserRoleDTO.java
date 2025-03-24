@@ -1,5 +1,6 @@
 package org.example.model.DTO.AccessControl;
-
+import org.example.model.DTO.AccessControl.UserDTO;
+import org.example.model.DTO.AccessControl.RoleDTO;
 import javax.persistence.*;
 
 @Entity
@@ -9,12 +10,12 @@ public class UserRoleDTO {
     @EmbeddedId
     private UserRoleId userRoleId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     @JoinColumn(name = "userId")
     private UserDTO user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("roleId")
     @JoinColumn(name = "roleId")
     private RoleDTO role;

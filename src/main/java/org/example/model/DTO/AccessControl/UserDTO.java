@@ -1,19 +1,18 @@
 package org.example.model.DTO.AccessControl;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 @Entity
-@Table(name= "user")
+@Table(name= "users")
 public class UserDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String username;
@@ -21,7 +20,9 @@ public class UserDTO {
     private String password;
     private boolean activated = false;
 
-    public int getId() {
+    public UserDTO() {}
+
+    public Integer getId() {
         return id;
     }
 
@@ -64,8 +65,6 @@ public class UserDTO {
                 ", activated=" + activated +
                 '}';
     }
-
-    public UserDTO() {}
 
     protected UserDTO(Builder builder) {
         this.firstName = builder.firstName;

@@ -15,6 +15,7 @@ public abstract class AbstractDAOIntegrationTest<T> {
     // session factory instantiated before tests
     @BeforeAll
     public static void setUpSessionFactory() {
+        System.setProperty("test.env", "true");
         sessionFactory = DbConnection.getSessionFactory();
         System.out.println("SessionFactoryCreated");
     }
