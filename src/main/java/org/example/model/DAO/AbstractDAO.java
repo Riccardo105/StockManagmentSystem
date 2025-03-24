@@ -23,7 +23,7 @@ public abstract class AbstractDAO<T> {
     public Integer create (T dto) {
         Session session = null;
         Transaction tx = null;
-        Integer generatedId = null;
+        Integer generatedId;
         try {
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
@@ -39,7 +39,6 @@ public abstract class AbstractDAO<T> {
 
             throw new RuntimeException("Failed to insert the entity", e);
         } finally {
-
             if (session != null) {
                 session.close();
             }
@@ -47,7 +46,7 @@ public abstract class AbstractDAO<T> {
         return generatedId;
     }
 
-    public T read (int id) {
+    public T read (Integer id) {
         Session session = null;
         Transaction tx = null;
         try {

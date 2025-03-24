@@ -9,6 +9,7 @@ public class PermissionsDAO extends AccessControlDAO<PermissionsDTO> {
         super(sessionFactory);
     }
 
+
     protected Class<PermissionsDTO> getDTOClass() {
         return PermissionsDTO.class;
     }

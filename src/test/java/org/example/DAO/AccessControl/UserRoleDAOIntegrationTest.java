@@ -1,6 +1,6 @@
 package org.example.DAO.AccessControl;
 
-import org.example.DAO.AbstractDAOIntegrationTest;
+
 import org.example.model.DAO.accessControl.UserDAO;
 import org.example.model.DAO.accessControl.UserRoleDAO;
 import org.example.model.DTO.AccessControl.RoleDTO;
@@ -8,6 +8,7 @@ import org.example.model.DTO.AccessControl.UserDTO;
 import org.example.model.DTO.AccessControl.UserRoleDTO;
 import org.example.model.DTO.AccessControl.UserRoleId;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.Test;
 
@@ -16,9 +17,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserRoleDAOIntegrationTest extends AbstractDAOIntegrationTest<UserRoleDTO> {
+public class UserRoleDAOIntegrationTest  {
 
-    public Integer HelperCreateDTO(Session session){
+    private final SessionFactory sessionFactory;
+
+    public UserRoleDAOIntegrationTest(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public UserRoleDTO HelperCreateDTO(Session session){
         RoleDTO roleDTO = new RoleDTO("Test Role");
         UserDTO userDTO = new UserDTO.Builder()
                  .setFirstName("Test first name")
@@ -36,11 +43,11 @@ public class UserRoleDAOIntegrationTest extends AbstractDAOIntegrationTest<UserR
         UserRoleDTO userRoleDTO = new UserRoleDTO(userDTO, roleDTO);
 
         Transaction tx2 = session.beginTransaction();
-        Integer userRoleId = (Integer) session.save(userRoleDTO);
+        session.save(userRoleDTO);
         tx2.commit();
         session.close();
 
-        return userRoleId;
+        return userRoleDTO;
     }
 
     public void HelperDeleteDTO(Session session, UserRoleDTO dto){
@@ -72,7 +79,7 @@ public class UserRoleDAOIntegrationTest extends AbstractDAOIntegrationTest<UserR
         UserRoleDTO userRoleDTO = new UserRoleDTO(userDTO, roleDTO);
         UserRoleDAO userRoleDAO = new UserRoleDAO(sessionFactory);
 
-        userRoleDAO.create(userRoleDTO);
+        userRoleDAO.createWithCompositeKey(userRoleDTO);
 
         UserRoleId userRoleId = new UserRoleId(userId, roleId);
 
