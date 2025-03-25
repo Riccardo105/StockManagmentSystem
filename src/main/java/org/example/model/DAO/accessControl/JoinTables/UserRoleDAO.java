@@ -1,37 +1,32 @@
-package org.example.model.DAO.accessControl;
+package org.example.model.DAO.accessControl.JoinTables;
 
 
+import org.example.model.DAO.accessControl.AbstractAccessControlDAO;
+import org.example.model.DTO.AccessControl.RoleDTO;
+import org.example.model.DTO.AccessControl.UserDTO;
 import org.example.model.DTO.AccessControl.UserRoleDTO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-public class UserRoleAbstractAccessControlDAO extends AbstractAccessControlDAO<UserRoleDTO> {
+import java.util.ArrayList;
 
-    public UserRoleAbstractAccessControlDAO(SessionFactory sessionFactory) {
-        super(sessionFactory);
+public class UserRoleDAO  {
+    private final SessionFactory sessionFactory;
+
+    public UserRoleDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
+    public void assignRole(UserDTO user, RoleDTO role) {}
+    public void revokeRole(UserDTO user, RoleDTO role) {}
+    public void revokeAllRolesForUser(UserDTO user) {}
 
-    public void createWithCompositeKey(UserRoleDTO dto) {
-        Transaction tx = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            tx = session.beginTransaction();
-            session.save(dto);
-            tx.commit();
-        } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            throw new RuntimeException("Failed to insert UserRole", e);
-        }finally {
-            if (session != null ){
-                session.close();
-            }
-        }
-    }
+    public ArrayList<RoleDTO> getRolesForUser(UserDTO user) {}
+    public ArrayList<UserDTO> getUsersForRole (RoleDTO role) {}
+    public ArrayList<UserRoleDTO> getUserRolePairs(){}
 
-    protected Class<UserRoleDTO> getDTOClass() {
-        return UserRoleDTO.class;
-    }
+    public boolean checkUserRoleExists(UserDTO user, RoleDTO role) {}
+
+
 }

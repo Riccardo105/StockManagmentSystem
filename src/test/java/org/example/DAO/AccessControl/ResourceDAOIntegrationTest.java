@@ -1,9 +1,7 @@
 package org.example.DAO.AccessControl;
 
 import org.example.DAO.AbstractDAOIntegrationTest;
-import org.example.model.DAO.accessControl.OperationDAO;
 import org.example.model.DAO.accessControl.ResourceDAO;
-import org.example.model.DTO.AccessControl.OperationDTO;
 import org.example.model.DTO.AccessControl.ResourceDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

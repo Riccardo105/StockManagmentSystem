@@ -2,7 +2,6 @@ package org.example.DAO.AccessControl;
 
 import org.example.model.DAO.accessControl.RoleDAO;
 import org.example.model.DTO.AccessControl.RoleDTO;
-import org.example.model.DTO.AccessControl.RoleDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.Test;

@@ -8,10 +8,10 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public abstract class AccessControlDAO<T> extends AbstractDAO<T> {
+public abstract class AbstractAccessControlDAO<T> extends AbstractDAO<T> {
 
 
-    public AccessControlDAO(SessionFactory sessionFactory) {
+    public AbstractAccessControlDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
 

@@ -3,9 +3,9 @@ package org.example.model.DAO.accessControl;
 import org.example.model.DTO.AccessControl.ResourceDTO;
 import org.hibernate.SessionFactory;
 
-public class ResourceAbstractAccessControlDAO extends AbstractAccessControlDAO<ResourceDTO> {
+public class ResourceDAO extends AbstractAccessControlDAO<ResourceDTO> {
 
-    public ResourceAbstractAccessControlDAO(SessionFactory sessionFactory) {
+    public ResourceDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
 

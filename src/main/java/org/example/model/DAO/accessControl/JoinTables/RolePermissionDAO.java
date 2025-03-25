@@ -1,34 +1,26 @@
-package org.example.model.DAO.accessControl;
-import org.example.model.DTO.AccessControl.RolePermissionsDTO;
+package org.example.model.DAO.accessControl.JoinTables;
+import org.example.model.DAO.accessControl.AbstractAccessControlDAO;
+import org.example.model.DTO.AccessControl.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-public class RolePermissionAbstractAccessControlDAO extends AbstractAccessControlDAO<RolePermissionsDTO> {
+import java.util.ArrayList;
 
-    public RolePermissionAbstractAccessControlDAO(SessionFactory sessionFactory) {
-        super(sessionFactory);
+public class RolePermissionDAO {
+    private final SessionFactory sessionFactory;
+
+    public RolePermissionDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-    public void createWithCompositeKey(RolePermissionsDTO dto) {
-        Transaction tx = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            tx = session.beginTransaction();
-            session.save(dto);
-            tx.commit();
-        } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            throw new RuntimeException("Failed to insert UserRole", e);
-        }finally {
-            if (session != null ){
-                session.close();
-            }
-        }
-    }
+    public void assignPermission(RoleDTO role, PermissionsDTO permission) {}
+    public void revokePermission(RoleDTO role, PermissionsDTO permission) {}
+    public void revokeAllPermissionForRole(RoleDTO role) {}
 
-    protected Class<RolePermissionsDTO> getDTOClass() {
-        return RolePermissionsDTO.class;
-    }
+    public ArrayList<PermissionsDTO> getPermissionForRole(RoleDTO role) {}
+    public ArrayList<RoleDTO> getRoleForPermission (PermissionsDTO permission) {}
+    public ArrayList<RolePermissionsDTO> getRolePermissionPairs(){}
+
+    public boolean checkRolePermissionExists(RoleDTO role, PermissionsDTO permission) {}
 }

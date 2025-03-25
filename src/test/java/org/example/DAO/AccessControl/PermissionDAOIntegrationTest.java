@@ -1,16 +1,12 @@
 package org.example.DAO.AccessControl;
 
 
-import org.example.model.DAO.accessControl.OperationDAO;
 import org.example.model.DAO.accessControl.PermissionsDAO;
 import org.example.model.DTO.AccessControl.OperationDTO;
 import org.example.model.DTO.AccessControl.PermissionsDTO;
 import org.example.model.DTO.AccessControl.ResourceDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
