@@ -6,9 +6,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-public class UserRoleDAO  extends AccessControlDAO<UserRoleDTO> {
+public class UserRoleAbstractAccessControlDAO extends AbstractAccessControlDAO<UserRoleDTO> {
 
-    public UserRoleDAO(SessionFactory sessionFactory) {
+    public UserRoleAbstractAccessControlDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
 
