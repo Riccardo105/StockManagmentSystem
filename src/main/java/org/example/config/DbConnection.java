@@ -6,6 +6,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+/**
+ * Singleton connection to the database, sets static sessionFactory at startup
+ * used throughout the app's lifecycle to operate on the database
+ */
 public class DbConnection {
     private static  SessionFactory sessionFactory;
     private static final Dotenv dotenv = Dotenv.load();
@@ -72,7 +76,7 @@ public class DbConnection {
     public static void SessionFactoryShutdown() {
         if (sessionFactory != null) {
             sessionFactory.close();
-            sessionFactory = null; // Set to null after closing
+            sessionFactory = null;
         }
     }
 

@@ -10,21 +10,14 @@ public class PermissionsDTO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = {
-            CascadeType.PERSIST,  // Save operation will cascade
-            CascadeType.MERGE     // Update operation will cascade
-    })
+    @ManyToOne()
     @JoinColumn(name = "operationId")
     private OperationDTO operation;
 
-    @ManyToOne(cascade = {
-            CascadeType.PERSIST,  // Save operation will cascade
-            CascadeType.MERGE     // Update operation will cascade
-    })
+    @ManyToOne()
     @JoinColumn(name = "resourceId")
     private ResourceDTO resource;
 
-    // Constructor
     public PermissionsDTO() {}
 
     public PermissionsDTO(OperationDTO operation, ResourceDTO resource) {
@@ -32,7 +25,6 @@ public class PermissionsDTO {
         this.resource = resource;
     }
 
-    // Getters
     public int getId() {
         return id;
     }

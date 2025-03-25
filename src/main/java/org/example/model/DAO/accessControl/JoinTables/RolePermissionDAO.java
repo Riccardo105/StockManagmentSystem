@@ -7,6 +7,10 @@ import org.hibernate.Transaction;
 
 import java.util.ArrayList;
 
+/**
+ * RolePermissionDAO does not follow standard AbstractDAO
+ * due to difference in crud operations for join tables
+ */
 public class RolePermissionDAO {
     private final SessionFactory sessionFactory;
 

@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "role")
 public class RoleDTO {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

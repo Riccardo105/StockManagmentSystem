@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "resources")
 public class ResourceDTO {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

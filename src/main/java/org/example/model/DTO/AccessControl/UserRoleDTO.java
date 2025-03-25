@@ -3,6 +3,12 @@ import org.example.model.DTO.AccessControl.UserDTO;
 import org.example.model.DTO.AccessControl.RoleDTO;
 import javax.persistence.*;
 
+
+/**
+ * This is a join table
+ * role and permission are mapped to the corresponding value in the UserRoleId.
+ * This allows Hibernate to correctly compose the composite key
+ */
 @Entity
 @Table(name = "userRole")
 public class UserRoleDTO {

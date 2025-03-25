@@ -11,6 +11,10 @@ import org.hibernate.Transaction;
 
 import java.util.ArrayList;
 
+/**
+ * UserRoleDAO does not follow standard AbstractDAO
+ * due to difference in crud operations for join tables
+ */
 public class UserRoleDAO  {
     private final SessionFactory sessionFactory;
 

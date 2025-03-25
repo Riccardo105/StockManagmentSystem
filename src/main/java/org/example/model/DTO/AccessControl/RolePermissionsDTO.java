@@ -2,6 +2,11 @@ package org.example.model.DTO.AccessControl;
 
 import javax.persistence.*;
 
+/**
+ * This is a join table
+ * role and permission are mapped to the corresponding value in the RolePermissionId.
+ * This allows Hibernate to correctly compose the composite key
+ */
 @Entity
 @Table(name = "rolePermissions")
 public class RolePermissionsDTO {
