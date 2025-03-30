@@ -76,7 +76,7 @@ public abstract class ProductDTO {
          *
          * @param id reflects id Primary key field in database.
          * NOTE: do not set id when creating a new product, as database id field is set to auto-increment.
-         * NOTE: only use this when reading an existing product from the database.
+         *
          */
         public T setId(int id) {
             this.id = id;
@@ -108,6 +108,7 @@ public abstract class ProductDTO {
          * @return subclasses' builder will return itself
          */
         protected abstract T self();
+
 
         public abstract ProductDTO build();
 
