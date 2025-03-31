@@ -5,7 +5,7 @@ import javax.persistence.*;
 /**
  * This is a join table
  * role and permission are mapped to the corresponding value in the RolePermissionId.
- * This allows Hibernate to correctly compose the composite key
+ * This allows Hibernate to correctly compose the composite key.
  */
 @Entity
 @Table(name = "rolePermissions")

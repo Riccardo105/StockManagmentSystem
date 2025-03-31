@@ -1,6 +1,5 @@
 package org.example.model.DAO.products;
 
-import org.example.model.DAO.AbstractDAO;
 import org.example.model.DTO.products.AudioBookDTO;
 import org.hibernate.SessionFactory;
 
