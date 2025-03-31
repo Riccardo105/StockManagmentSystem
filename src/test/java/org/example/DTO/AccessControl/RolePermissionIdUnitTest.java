@@ -4,7 +4,8 @@ import org.example.model.DTO.AccessControl.RolePermissionsId;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RolePermissionIdUnitTest {
+public class
+RolePermissionIdUnitTest {
 
     @Test
     public void testValidObjectCreation() {

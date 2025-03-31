@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RoleDTOUnitTest {
     @Test
     public void TestValidObjectCreation() {
-        RoleDTO roleDTO = new RoleDTO("test Role");
+        RoleDTO roleDTO = new RoleDTO("test role");
 
         assertEquals( "test role", roleDTO.getName());
     }
@@ -17,7 +17,7 @@ public class RoleDTOUnitTest {
     public void TestValidObjectCreationWithParent() {
         RoleDTO ParentRoleDTO = new RoleDTO("test parent role");
 
-        RoleDTO roleDTO = new RoleDTO("test Role", ParentRoleDTO);
+        RoleDTO roleDTO = new RoleDTO("test role", ParentRoleDTO);
 
         assertEquals( "test role", roleDTO.getName());
         assertEquals("test parent role", ParentRoleDTO.getName());

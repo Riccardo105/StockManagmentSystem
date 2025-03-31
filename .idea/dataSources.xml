@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Stock_management_system" uuid="cbac06b1-9b08-4f67-b0dd-c60fac7ebdba">
+    <data-source source="LOCAL" name="Stock_management_system@mysql-f4995cb-stock-managment-system.d.aivencloud.com" uuid="cbac06b1-9b08-4f67-b0dd-c60fac7ebdba">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
