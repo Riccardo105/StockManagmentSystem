@@ -12,8 +12,8 @@ public class RoleDTO {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "parentRoleId")
-    private RoleDTO parentRole;
+    @JoinColumn(name = "childRole")
+    private RoleDTO childRole;
 
     public RoleDTO() {}
 
@@ -21,9 +21,9 @@ public class RoleDTO {
         this.name = name;
     }
 
-    public RoleDTO(String name, RoleDTO parentRole) {
+    public RoleDTO(String name, RoleDTO childRole) {
         this.name = name;
-        this.parentRole = parentRole;
+        this.childRole = childRole;
     }
 
     public void setId(int id) {
@@ -41,11 +41,11 @@ public class RoleDTO {
         return name;
     }
 
-    public void setParentRole(RoleDTO parentRole) {
-        this.parentRole = parentRole;
+    public void setChildRole(RoleDTO childRole) {
+        this.childRole = childRole;
     }
 
-    public RoleDTO getParentRole() {
-        return parentRole;
+    public RoleDTO getChildRole() {
+        return childRole;
     }
 }

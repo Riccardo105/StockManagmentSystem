@@ -23,7 +23,6 @@ public class UserRoleDAO  {
         this.sessionFactory = sessionFactory;
     }
 
-
     public List<RoleDTO> getRolesForUser(UserDTO user) {
         try (Session session = sessionFactory.openSession()) {
             // First get direct roles
@@ -33,29 +32,38 @@ public class UserRoleDAO  {
                     .setParameter("userId", user.getId())
                     .getResultList();
 
-            // If no direct roles, return empty list
             if (directRoles.isEmpty()) {
                 return directRoles;
             }
 
-            // Get all parent roles recursively using native SQL
-            List<RoleDTO> inheritedRoles = session.createNativeQuery("""
-            WITH RECURSIVE role_hierarchy AS (
-                SELECT r.* FROM roles r
-                WHERE r.id IN (:roleIds)
-                UNION ALL SELECT r.* FROM roles r
-                JOIN role_hierarchy rh ON r.id = rh.parent_role_id
-                WHERE r.parent_role_id IS NOT NULL
-            )
-            SELECT * FROM role_hierarchy
-            """, RoleDTO.class)
-                    .setParameterList("roleIds", directRoles.stream().map(RoleDTO::getId).collect(Collectors.toList()))
+            // Convert to list of IDs
+            List<Integer> roleIds = directRoles.stream()
+                    .map(RoleDTO::getId)
+                    .collect(Collectors.toList());
+
+            // Get all descendant roles recursively using native SQL
+            // Note: Changed :roleIds to ?1 for positional parameter
+            List<RoleDTO> descendantRoles = session.createNativeQuery("""
+        WITH RECURSIVE role_hierarchy AS (
+            -- Base case: start with direct roles
+            SELECT r.* FROM role r WHERE r.id IN (?1)
+            
+            UNION ALL
+            
+            -- Recursive case: find all roles that are children of roles in the hierarchy
+            SELECT r.* FROM role r
+            JOIN role_hierarchy rh ON r.id = rh.childRole
+            WHERE rh.childRole IS NOT NULL
+        )
+        SELECT * FROM role_hierarchy
+        """, RoleDTO.class)
+                    .setParameter(1, roleIds)  // Using positional parameter
                     .getResultList();
 
             // Combine and remove duplicates
             Set<RoleDTO> allRoles = new LinkedHashSet<>();
             allRoles.addAll(directRoles);
-            allRoles.addAll(inheritedRoles);
+            allRoles.addAll(descendantRoles);
 
             return new ArrayList<>(allRoles);
         } catch (Exception e) {
@@ -63,4 +71,5 @@ public class UserRoleDAO  {
         }
     }
 }
+
 
