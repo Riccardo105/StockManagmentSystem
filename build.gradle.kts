@@ -1,7 +1,13 @@
 plugins {
     id("java")
+    id("org.openjfx.javafxplugin") version "0.1.0"
+    id("application")
 }
 
+javafx {
+    version = "22"
+    modules = listOf("javafx.controls", "javafx.fxml")
+}
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
@@ -26,8 +32,14 @@ dependencies {
     implementation ("jakarta.persistence:jakarta.persistence-api:3.1.0")
 }
 
-
-
 tasks.test {
     useJUnitPlatform()
+}
+
+application {
+    mainClass.set("org.example.Main")
+}
+
+tasks.withType<JavaCompile> {
+    options.release.set(21)
 }

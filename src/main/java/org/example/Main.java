@@ -1,17 +1,18 @@
 package org.example;
 
-import org.example.config.DbConnection;
-import org.hibernate.SessionFactory;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import org.example.view.ViewManager;
 
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+public class Main extends Application {
+
+
+    @Override
+    public void start(Stage primaryStage) {
+        ViewManager.init(primaryStage);
+        ViewManager.showDashboardView();
+    }
     public static void main(String[] args) {
-
-        System.out.println("Hello World");
-
-
-
-    }
-    }
+    launch(args);}
+}
