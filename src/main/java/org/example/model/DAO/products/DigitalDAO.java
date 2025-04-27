@@ -1,10 +1,11 @@
 package org.example.model.DAO.products;
-
+import com.google.inject.Inject;
 import org.example.model.DTO.products.DigitalDTO;
 import org.hibernate.SessionFactory;
 
 public class DigitalDAO extends AbstractProductDAO<DigitalDTO> {
 
+    @Inject
     public DigitalDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
     }

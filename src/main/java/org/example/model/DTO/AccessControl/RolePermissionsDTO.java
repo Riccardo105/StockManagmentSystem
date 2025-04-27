@@ -1,6 +1,7 @@
 package org.example.model.DTO.AccessControl;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * This is a join table
@@ -43,4 +44,6 @@ public class RolePermissionsDTO {
     public PermissionsDTO getPermission() {
         return permission;
     }
+
+
 }

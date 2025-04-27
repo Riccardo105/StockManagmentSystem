@@ -1,5 +1,5 @@
 package org.example.model.DAO.accessControl;
-
+import com.google.inject.Inject;
 import org.example.model.DTO.AccessControl.PermissionsDTO;
 import org.example.model.DTO.AccessControl.UserDTO;
 import org.hibernate.Session;
@@ -11,6 +11,7 @@ import java.util.List;
 public class UserDAO {
     private final SessionFactory sessionFactory;
 
+    @Inject
     public UserDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -28,14 +29,14 @@ public class UserDAO {
         }
     }
 
-    public UserDTO getByUsername(String username) {
+    public UserDTO getByEmail(String email) {
         try (Session session = sessionFactory.openSession()) {
-            String hql = "FROM UserDTO WHERE username = :username";
+            String hql = "FROM UserDTO WHERE email= :email";
             return session.createQuery(hql, UserDTO.class)
-                    .setParameter("username", username)
+                    .setParameter("email", email)
                     .uniqueResult();
         } catch (Exception e) {
-            throw new RuntimeException("no account found for the username" + e);
+            throw new RuntimeException("database operation failed", e);
         }
 
     }
@@ -45,11 +46,11 @@ public class UserDAO {
                     .getResultList();
         }catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to fetch not actived accounts" + e);
+            throw new RuntimeException("Failed to fetch not active accounts" + e);
         }
 
     }
-    public void ActivateAccount(UserDTO user) {
+    public void activateAccount(UserDTO user) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             session.createQuery("update UserDTO u set u.activated=true where u.id=:id")
@@ -58,7 +59,7 @@ public class UserDAO {
             tx.commit();
         }catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to activate account " + e);
+            throw new RuntimeException(e);
         }
 
     }

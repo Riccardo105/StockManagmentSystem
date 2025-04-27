@@ -14,5 +14,5 @@ public class Main extends Application {
         ViewManager.showDashboardView();
     }
     public static void main(String[] args) {
-    launch(args);}
+        launch(args);}
 }

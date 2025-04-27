@@ -7,14 +7,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import com.google.inject.Inject;
 
-/**
- * RolePermissionDAO does not follow standard AbstractDAO
- * due to difference in crud operations for join tables
- */
 public class RolePermissionDAO {
     private final SessionFactory sessionFactory;
 
+    @Inject
     public RolePermissionDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

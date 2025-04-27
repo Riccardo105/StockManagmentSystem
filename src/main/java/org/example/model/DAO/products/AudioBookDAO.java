@@ -1,10 +1,12 @@
 package org.example.model.DAO.products;
+import com.google.inject.Inject;
 
 import org.example.model.DTO.products.AudioBookDTO;
 import org.hibernate.SessionFactory;
 
 public class AudioBookDAO extends AbstractProductDAO<AudioBookDTO> {
 
+    @Inject
     public AudioBookDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
     }

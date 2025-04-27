@@ -12,7 +12,7 @@ public class RoleDTO {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "childRole")
+    @JoinColumn(name = "childRoleId")
     private RoleDTO childRole;
 
     public RoleDTO() {}

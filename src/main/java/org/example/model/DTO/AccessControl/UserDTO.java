@@ -15,7 +15,7 @@ public class UserDTO {
     private Integer id;
     private String firstName;
     private String lastName;
-    private String username;
+
     private String email;
     private String password;
     private boolean activated = false;
@@ -34,9 +34,6 @@ public class UserDTO {
         return lastName;
     }
 
-    public String getUsername() {
-        return username;
-    }
 
     public String getEmail() {
         return email;
@@ -59,7 +56,6 @@ public class UserDTO {
         return "UserDTO{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", activated=" + activated +
@@ -69,7 +65,6 @@ public class UserDTO {
     protected UserDTO(Builder builder) {
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
-        this.username = builder.username;
         this.email = builder.email;
         this.password = builder.password;
 
@@ -78,7 +73,6 @@ public class UserDTO {
     public static class Builder {
         private String firstName;
         private String lastName;
-        private String username;
         private String email;
         private String password;
 
@@ -89,11 +83,6 @@ public class UserDTO {
 
         public Builder setLastName(String lastName) {
             this.lastName = lastName;
-            return this;
-        }
-
-        public Builder setUsername(String username) {
-            this.username = username;
             return this;
         }
 

@@ -1,6 +1,7 @@
 package org.example.model.DTO.AccessControl;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "resources")
@@ -32,5 +33,18 @@ public class ResourceDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ResourceDTO resourceDTO = (ResourceDTO) o;
+        return Objects.equals(name, resourceDTO.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

@@ -14,6 +14,7 @@ public class DbConnection {
     private static  SessionFactory sessionFactory;
     private static final Dotenv dotenv = Dotenv.load();
     private static final String databaseURL;
+
     static {
         try {
 
@@ -80,7 +81,7 @@ public class DbConnection {
         }
     }
 
-    // this method used only for: testing and initialising SessionFactory at program startup
+
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }

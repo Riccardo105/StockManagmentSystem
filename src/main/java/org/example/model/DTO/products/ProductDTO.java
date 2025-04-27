@@ -64,6 +64,13 @@ public abstract class ProductDTO {
     public void updateSellingPrice(float sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
+
+    public double calculateStockBuyingCost(){
+        return stock * buyingPrice;
+    }
+    public double calculateStockSellingValue(){
+        return stock * sellingPrice;
+    }
     
     public abstract static class Builder<T extends Builder<T>> {
         private int id;
@@ -102,6 +109,7 @@ public abstract class ProductDTO {
             this.sellingPrice = sellingPrice;
             return self();
         }
+
 
         /**
          * this method is needed so that each subclass can assign its own builder to the method's return

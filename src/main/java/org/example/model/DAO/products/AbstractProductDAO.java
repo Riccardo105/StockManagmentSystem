@@ -12,6 +12,7 @@ public abstract class AbstractProductDAO<T>{
     public AbstractProductDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
+
     public Integer create (T dto) {
         Session session = null;
         Transaction tx = null;
@@ -29,7 +30,7 @@ public abstract class AbstractProductDAO<T>{
                 tx.rollback();
             }
 
-            throw new RuntimeException("Failed to insert the entity", e);
+            throw new RuntimeException(e);
         } finally {
             if (session != null) {
                 session.close();
@@ -55,7 +56,7 @@ public abstract class AbstractProductDAO<T>{
                 tx.rollback();
             }
 
-            throw new RuntimeException("Failed to read the entity", e);
+            throw new RuntimeException(e);
         } finally {
 
             if (session != null && session.isOpen()) {
@@ -81,7 +82,7 @@ public abstract class AbstractProductDAO<T>{
                 tx.rollback();
             }
 
-            throw new RuntimeException("Failed to update the entity", e);
+            throw new RuntimeException(e);
         } finally {
 
             if (session != null && session.isOpen()) {
@@ -108,7 +109,7 @@ public abstract class AbstractProductDAO<T>{
                 tx.rollback();
             }
 
-            throw new RuntimeException("Failed to delete the entity", e);
+            throw new RuntimeException(e);
         }finally{
 
             if (session != null && session.isOpen()) {
@@ -137,7 +138,7 @@ public abstract class AbstractProductDAO<T>{
                 tx.rollback();
             }
 
-            throw new RuntimeException("Failed to update the entity", e);
+            throw new RuntimeException(e);
         }finally{
 
             if (session != null && session.isOpen()) {
@@ -167,7 +168,7 @@ public abstract class AbstractProductDAO<T>{
                 tx.rollback();
             }
 
-            throw new RuntimeException("Failed to update the entity", e);
+            throw new RuntimeException(e);
         }finally{
 
             if (session != null && session.isOpen()) {
