@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.ProductType;
 import org.example.view.partials.ProductFormBuilder;
+import org.example.view.partials.ProductInfo;
+import org.example.view.partials.ProductInfoPreview;
 import org.example.view.partials.SearchBar;
 
 
@@ -22,8 +24,10 @@ public class DashboardView extends VBox {
         this.setPadding(new Insets(20));
         this.setAlignment(Pos.TOP_CENTER);
 
+        // search bar
         HBox searchBar = new SearchBar();
 
+        // create new button
         ComboBox<ProductType> createNew = new ComboBox<>();
         createNew.getItems().addAll(ProductType.values());
         createNew.setPromptText("Create new");
@@ -34,13 +38,22 @@ public class DashboardView extends VBox {
             }
         });
 
-        HBox createNewContainer = new HBox(createNew);
-        createNewContainer.setAlignment(Pos.TOP_RIGHT);
-        createNewContainer.setMaxWidth(Double.MAX_VALUE);
+        // print stock report button
+        Button stockReport = new Button("Stock Report");
 
-        VBox.setVgrow(createNewContainer, Priority.ALWAYS);
+        HBox controlPanel = new HBox(stockReport, createNew);
+        HBox.setMargin(stockReport, new Insets(0, 10, 0, 0) );
+        controlPanel.setAlignment(Pos.TOP_RIGHT);
+        controlPanel.setMaxWidth(Double.MAX_VALUE);
 
-        getChildren().addAll(searchBar, createNewContainer);
+        VBox.setVgrow(controlPanel, Priority.ALWAYS);
+
+        VBox productsPreview = new ProductInfoPreview();
+
+        Button saveChanges = new Button("Save changes");
+
+        getChildren().addAll(searchBar, controlPanel, productsPreview, saveChanges);
+
     }
 
     private void showCreateForm(ProductType productType) {
@@ -64,5 +77,9 @@ public class DashboardView extends VBox {
 
         createProductStage.setScene(createProductScene);
         createProductStage.show();
+    }
+
+    public static void showProductDetailWindow(ProductInfo productInfo) {
+
     }
 }

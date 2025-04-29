@@ -50,6 +50,6 @@ public class SignupView extends VBox {
         Hyperlink loginLink = new Hyperlink("Already have an account? login in");
         loginLink.setOnAction(e -> ViewManager.showLoginView());
 
-        this.getChildren().addAll(title, firstNameField, lastNameField, emailField, passwordField, confirmPasswordField, loginLink);
+        this.getChildren().addAll(title, firstNameField, lastNameField, emailField, passwordField, confirmPasswordField, SignupButton, loginLink);
     }
 }
