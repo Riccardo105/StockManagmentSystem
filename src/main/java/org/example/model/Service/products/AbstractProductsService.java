@@ -1,11 +1,10 @@
 package org.example.model.Service.products;
 
 
+import org.example.config.ObjectCreationException;
 import org.example.model.DTO.products.ProductDTO;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * each product service takes in an instance of its corresponding DAO
@@ -13,40 +12,52 @@ import java.util.Map;
 public abstract class AbstractProductsService<T extends ProductDTO> {
 
     // each concrete service populate this list in the constructor
-    List<String> requiredFields;
+    List<String> requiredFields = new ArrayList<>();
+    Map<String, String> errorMap = new HashMap<>();
 
-    protected boolean validatePrice(float sellingPrice , float buyingCost){
-        return  sellingPrice > ( buyingCost * 1.5);
+    protected void validatePrice(float sellingPrice , float buyingCost){
+        if (sellingPrice < (buyingCost * 1.5)){
+            errorMap.put("sellingPrice", "Selling Price must at least 1.5 times the buying cost");
+        }
     }
-    protected boolean validateStockLevel(int stockLevel){
-        return stockLevel > 0;
+    protected void validateStockLevel(int stockLevel){
+        if (stockLevel < 0){
+            errorMap.put("stockLevel", "Stock Level must not be negative");
+        };
     }
 
-    public boolean validateObjectFields(Map<String, ?> formData) {
+    public void validateObjectFields(Map<String, ?> formData) {
 
         for (String field : requiredFields) {
             if (formData.get(field) == null) {
-                return false;
+                errorMap.put(field, "Field must not be null");
             }
         }
-        return true;
     }
 
     /** all checks grouped here to be called by concrete classes
-     *
+     * this method throws a custom ObjectCreationException populated with an errors map
      * @param formData the data from the UI
      */
     public void validateObjectCreation(Map<String, Object> formData) {
-        boolean isObjectValid = validateObjectFields(formData);
-        boolean isPriceValid = validatePrice((float) formData.get("sellingPrice"), (float) formData.get("buyingPrice"));
-        boolean isStockLevelValid = validateStockLevel((Integer) formData.get("stock"));
-        if (!isObjectValid || !isPriceValid || !isStockLevelValid) {
-            throw new IllegalArgumentException("invalid data");
+        errorMap.clear();
+
+         validateObjectFields(formData);
+
+        if (!errorMap.isEmpty()) {
+            throw new ObjectCreationException(errorMap);
+        }
+
+         // UI has taken care of parsing inputs before populating formData
+         validatePrice((float) formData.get("sellingPrice"), (float) formData.get("buyingPrice"));
+         validateStockLevel((Integer) formData.get("stock"));
+        if (!errorMap.isEmpty()) {
+            throw new ObjectCreationException(errorMap);
         }
     }
 
-    public abstract void createService(Map<String,Object> params);
-    public abstract List<T> updateService(List<T> productsToUpdate);
-    public abstract void deleteService(List<T> productsToDelete);
+    public abstract T createService(Map<String,Object> params);
+    // public abstract List<T> updateService(List<T> productsToUpdate);
+
 
 }

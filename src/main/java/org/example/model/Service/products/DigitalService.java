@@ -13,25 +13,24 @@ import java.util.List;
 import java.util.Map;
 
 public class DigitalService extends AbstractProductsService<DigitalDTO> {
-    DigitalDAO digitalDAO;
 
     @Inject
-    public DigitalService(DigitalDAO digitalDAO) {
-        this.digitalDAO = digitalDAO;
-        this.requiredFields = Arrays.asList("title", "stock", "buyingPrice", "sellingPrice", "format", "artist",
-                "genre", "releaseDate", "playTime", "tracksNum", "fileFormat", "FileSize", "BitrateMbps");
+    public DigitalService() {
+        this.requiredFields = Arrays.asList("title", "stock", "buyingPrice", "sellingPrice", "artist",
+                "genre", "releaseDate", "playTime", "tracksNum", "fileFormat", "fileSize", "bitrateMbps");
     }
 
-    public void createService(Map<String, Object> formData) {
-        validateObjectCreation(formData);
-        DigitalDTO digitalDTO = new DigitalDTO.Builder()
+    public DigitalDTO createService(Map<String, Object> formData) {
+        validateObjectCreation(formData);  // throws is validation fails
+
+        return new DigitalDTO.Builder()
                 .setTitle(formData.get("title").toString())
                 .setBuyingPrice((float) formData.get("buyingPrice"))
                 .setStock((int) formData.get("stock"))
                 .setSellingPrice((float) formData.get("sellingPrice"))
-                .setFormat(formData.get("format").toString())
+                .setFormat("Digital")
                 .setArtist(formData.get("artist").toString())
-                .setLabel(formData.get("label").toString())
+                .setLabel(formData.get("label") != null ? formData.get("label").toString() : null)
                 .setGenre(formData.get("genre").toString())
                 .setReleaseDate(Date.valueOf(formData.get("releaseDate").toString()))
                 .setPlayTime(Time.valueOf(formData.get("playTime").toString()))
@@ -41,43 +40,5 @@ public class DigitalService extends AbstractProductsService<DigitalDTO> {
                 .setBitrateMbps((Integer) formData.get("bitrateMbps"))
                 .build();
 
-        try {
-            digitalDAO.create(digitalDTO);
-        } catch (Exception e) {
-            throw new RuntimeException("Error while creating audio book", e);
-        }
-    }
-
-
-    /**
-     *
-     * @param productsToUpdate products the user as modified
-     * @return list of invalid objects, so that the UI can identify the ones and show them to the user
-     */
-    public List<DigitalDTO> updateService(List<DigitalDTO> productsToUpdate) {
-        List<DigitalDTO> invalidItems = new ArrayList<>();
-
-        for (DigitalDTO dto: productsToUpdate){
-            if (!validatePrice(dto.getSellingPrice(), dto.getBuyingPrice()) || !validateStockLevel(dto.getStock())) {
-                productsToUpdate.remove(dto);
-                invalidItems.add(dto);
-            }
-        }
-
-        try {
-            digitalDAO.update(productsToUpdate);
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Error during update operation", e);
-        }
-
-        return invalidItems;
-    }
-
-    public void deleteService(List<DigitalDTO> productsToDelete) {
-        try {
-            digitalDAO.delete(productsToDelete);
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Error during delete operation", e);
-        }
     }
 }

@@ -125,6 +125,7 @@ public class DataLoading {
     };
 
     public static void loadProducts() {
+        System.setProperty("test.env", "true");
         SessionFactory sessionFactory = DbConnection.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();

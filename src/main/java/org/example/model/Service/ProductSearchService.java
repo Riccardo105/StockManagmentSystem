@@ -1,7 +1,10 @@
 package org.example.model.Service;
 
+import com.google.inject.Inject;
+import org.example.ProductType;
 import org.example.model.DTO.products.BookDTO;
 import org.example.model.DTO.products.MusicDTO;
+import org.example.model.DTO.products.ProductDTO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,7 +15,7 @@ import java.util.ArrayList;
 public class ProductSearchService {
     private final SessionFactory sessionFactory;
 
-
+    @Inject
     public ProductSearchService(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -61,13 +64,14 @@ public class ProductSearchService {
 
     /**
      * category chosen by user in search bar (mandatory)
-     * @param format chose by user (optional)
-     * @param keyword inputted by the user (mandatory
+     *
+     * @param format  chose by user (optional)
+     * @param keyword inputted by the user (mandatory)
      * @return list of found books
      */
-    public ArrayList<BookDTO> QueryBooks(String format, String keyword){
+    public ArrayList<ProductDTO> QueryBooks(ProductType format, String keyword){
         Session session = sessionFactory.openSession();
-        ArrayList<BookDTO> results = new ArrayList<>();
+        ArrayList<ProductDTO> results = new ArrayList<>();
 
         Query<BookDTO> ebookQuery = session.createQuery(ebookQueryBuilder(), BookDTO.class);
         Query<BookDTO> paperBookQuery = session.createQuery(paperBookQueryBuilder(), BookDTO.class);
@@ -77,21 +81,22 @@ public class ProductSearchService {
         paperBookQuery.setParameter("keyword", "%" + keyword + "%");
         audioBookQuery.setParameter("keyword", "%" + keyword + "%");
 
-        if (format == null || format.isEmpty()) {
+        if (format == null) {
                 results.addAll(executeQuery(ebookQuery, session));
                 results.addAll(executeQuery(paperBookQuery, session));
                 results.addAll(executeQuery(audioBookQuery, session));
         }else {
 
-            switch (format.toLowerCase()) {
-                case "ebook":
+            switch (format) {
+                case Ebook:
                     results.addAll(executeQuery(ebookQuery, session));
                     break;
-                case "paperbook":
+                case PaperBook:
                     results.addAll(executeQuery(paperBookQuery, session));
                     break;
-                case "audiobook":
+                case AudioBook:
                     results.addAll(executeQuery(audioBookQuery, session));
+                    break;
             }
         }
         session.close();
@@ -104,9 +109,9 @@ public class ProductSearchService {
      * @param keyword inputted by the user (mandatory
      * @return list of found music
      */
-    public ArrayList<MusicDTO> QueryMusic(String format, String keyword){
+    public ArrayList<ProductDTO> QueryMusic(ProductType format, String keyword){
         Session session = sessionFactory.openSession();
-        ArrayList<MusicDTO> results = new ArrayList<>();
+        ArrayList<ProductDTO> results = new ArrayList<>();
 
         Query<MusicDTO> cdQuery = session.createQuery(cdQueryBuilder(), MusicDTO.class);
         Query<MusicDTO> digitalQuery = session.createQuery(digitalQueryBuilder(), MusicDTO.class);
@@ -116,21 +121,22 @@ public class ProductSearchService {
         digitalQuery.setParameter("keyword", "%" + keyword + "%");
         vinylQuery.setParameter("keyword", "%" + keyword + "%");
 
-        if (format == null || format.isEmpty()) {
+        if (format == null) {
             results.addAll(executeQuery(cdQuery, session));
             results.addAll(executeQuery(digitalQuery, session));
             results.addAll(executeQuery(vinylQuery, session));
         }else {
 
-            switch (format.toLowerCase()) {
-                case "cd":
+            switch (format) {
+                case Cd:
                     results.addAll(executeQuery(cdQuery, session));
                     break;
-                case "digital":
+                case Digital:
                     results.addAll(executeQuery(digitalQuery, session));
                     break;
-                case "vinyl":
+                case Vinyl:
                     results.addAll(executeQuery(vinylQuery, session));
+                    break;
             }
         }
         session.close();

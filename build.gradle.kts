@@ -1,11 +1,11 @@
 plugins {
     id("java")
-    id("org.openjfx.javafxplugin") version "0.1.0"
+    id("org.openjfx.javafxplugin") version "0.0.13"
     id("application")
 }
 
 javafx {
-    version = "22"
+    version = "23.0.2"
     modules = listOf("javafx.controls", "javafx.fxml")
 }
 group = "org.example"

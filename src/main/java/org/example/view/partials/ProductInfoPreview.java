@@ -1,5 +1,7 @@
 package org.example.view.partials;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -11,19 +13,19 @@ import javafx.util.converter.IntegerStringConverter;
 import org.example.model.DTO.products.ProductDTO;
 import org.example.view.DashboardView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ProductInfoPreview extends VBox {
 
     /**
-     * this list holds all the products that were  modified
-     * and is shipped off once the user clicks on the save button
+     * observable list used to dynamically update ui once change in list is detected
      */
-    ArrayList<ProductDTO> productsToUpdate = new ArrayList<>();
+   private final  ObservableList<ProductDTO> productResult = FXCollections.observableArrayList();
 
     @SuppressWarnings("unchecked")
     public ProductInfoPreview() {
-        TableView<ProductDTO> productsTable = new TableView<>();
+
+        TableView<ProductDTO> productsTable = new TableView<>(this.productResult);
         productsTable.setEditable(true);
 
         TableColumn<ProductDTO, String> titleCol = createTitleCol();
@@ -35,6 +37,19 @@ public class ProductInfoPreview extends VBox {
         buyingPriceCol.setCellValueFactory(new PropertyValueFactory<>("buyingPrice"));
         TableColumn<ProductDTO, Float> sellingPriceCol = new TableColumn<>("Selling price");
         sellingPriceCol.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
+
+        titleCol.setPrefWidth(315);
+        formatCol.setPrefWidth(175);
+        stockCol.setPrefWidth(80);
+        buyingPriceCol.setPrefWidth(94);
+        sellingPriceCol.setPrefWidth(94);
+
+
+        titleCol.setResizable(true);
+        formatCol.setResizable(true);
+        stockCol.setResizable(true);
+        buyingPriceCol.setResizable(true);
+        sellingPriceCol.setResizable(true);
 
 
         productsTable.getColumns().addAll(titleCol, formatCol, stockCol, buyingPriceCol, sellingPriceCol);
@@ -80,17 +95,7 @@ public class ProductInfoPreview extends VBox {
         stockCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         stockCol.setOnEditCommit(event -> {
             ProductDTO originalProduct = event.getRowValue();  // Get the original product
-            Integer newStock = event.getNewValue();             // Get the new stock value from the edit
-
-            ProductDTO existingProduct = checkProductIsAlreadyUpdated(originalProduct);
-            if (existingProduct != null) {
-                // If product is already in the list, update it
-                existingProduct.updateStock(newStock);
-            } else {
-                // If product is not in the list, create a new product and add to the list
-                 
-
-            }
+            Integer newStock = event.getNewValue();            // Get the new stock value from the edit
         });
         return stockCol;
     }
@@ -102,14 +107,6 @@ public class ProductInfoPreview extends VBox {
         buyingPriceCol.setOnEditCommit(event -> {
             ProductDTO originalProduct = event.getRowValue();  // Get the original product
             Float newBuyingPrice = event.getNewValue();         // Get the new buying price value from the edit
-
-            ProductDTO existingProduct = checkProductIsAlreadyUpdated(originalProduct);
-            if (existingProduct != null) {
-                // If product is already in the list, update it
-                existingProduct.updateBuyingPrice(newBuyingPrice);
-            } else {
-                // If product is not in the list, create a new product and add to the lis
-            }
         });
         return buyingPriceCol;
     }
@@ -122,31 +119,13 @@ public class ProductInfoPreview extends VBox {
         sellingPriceCol.setOnEditCommit(event -> {
             ProductDTO originalProduct = event.getRowValue();  // Get the original product
             Float newSellingPrice = event.getNewValue();         // Get the new selling price value from the edit
-
-            ProductDTO existingProduct = checkProductIsAlreadyUpdated(originalProduct);
-            if (existingProduct != null) {
-                // If product is already in the list, update it
-                existingProduct.updateSellingPrice(newSellingPrice);
-            } else {
-                // If product is not in the list, create a new product and add to the list
-            }
         });
         return sellingPriceCol;
     }
 
-    /**
-     * used to check if a product was already modified
-     * @param product the product that is being updated
-     * @return the product if it finds it in the updateProduct list
-     */
-    private ProductDTO checkProductIsAlreadyUpdated(ProductDTO product) {
-        for (ProductDTO p : productsToUpdate) {
-            if (p.getId() == product.getId()) {}
-                return p;
-        }
-        return null;
+    public void updateTableEntries(List<ProductDTO> products) {
+        productResult.setAll(products);
     }
-
 }
 
 

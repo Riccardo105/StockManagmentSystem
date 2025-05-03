@@ -9,6 +9,11 @@ import java.util.List;
 public abstract class AbstractProductDAO<T>{
     protected final SessionFactory sessionFactory;
 
+    /**
+     * perform 4 crud operation
+     * takes in the DTO class from its children
+     * @param sessionFactory injected by Guice
+     */
     public AbstractProductDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

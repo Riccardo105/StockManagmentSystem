@@ -13,25 +13,25 @@ import java.util.List;
 import java.util.Map;
 
 public class VinylService extends AbstractProductsService<VinylDTO>{
-    VinylDAO vinylDAO;
+
 
     @Inject
-    public VinylService(VinylDAO vinylDAO) {
-        this.vinylDAO = vinylDAO;
-        this.requiredFields = Arrays.asList("title", "stock", "buyingPrice", "sellingPrice", "format", "artist",
-                "genre", "numPages","releaseDate", "playTime", "tracksNum", "rpm", "size", "edition");
+    public VinylService() {
+        this.requiredFields = Arrays.asList("title", "stock", "buyingPrice", "sellingPrice", "artist",
+                "genre", "releaseDate", "playTime", "tracksNum", "rpm", "size", "edition");
     }
 
-    public void createService(Map<String, Object> formData) {
-        validateObjectCreation(formData);
-        VinylDTO vinylDTO = new VinylDTO.Builder()
+    public VinylDTO createService(Map<String, Object> formData) {
+        validateObjectCreation(formData);  // throws is validation fails
+
+        return new VinylDTO.Builder()
                 .setTitle(formData.get("title").toString())
                 .setBuyingPrice((float) formData.get("buyingPrice"))
                 .setStock((int) formData.get("stock"))
                 .setSellingPrice((float) formData.get("sellingPrice"))
-                .setFormat(formData.get("format").toString())
+                .setFormat("vinyl")
                 .setArtist(formData.get("artist").toString())
-                .setLabel(formData.get("label").toString())
+                .setLabel(formData.get("label") != null ? formData.get("label").toString() : null)
                 .setGenre(formData.get("genre").toString())
                 .setReleaseDate(Date.valueOf(formData.get("releaseDate").toString()))
                 .setPlayTime(Time.valueOf(formData.get("playTime").toString()))
@@ -40,44 +40,5 @@ public class VinylService extends AbstractProductsService<VinylDTO>{
                 .setSize((Integer) formData.get("size"))
                 .setEdition(formData.get("edition").toString())
                 .build();
-
-        try {
-            vinylDAO.create(vinylDTO);
-        } catch (Exception e) {
-            throw new RuntimeException("Error while creating audio book", e);
-        }
-    }
-
-
-    /**
-     *
-     * @param productsToUpdate products the user as modified
-     * @return list of invalid objects, so that the UI can identify the ones and show them to the user
-     */
-    public List<VinylDTO> updateService(List<VinylDTO> productsToUpdate) {
-        List<VinylDTO> invalidItems = new ArrayList<>();
-
-        for (VinylDTO dto: productsToUpdate){
-            if (!validatePrice(dto.getSellingPrice(), dto.getBuyingPrice()) || !validateStockLevel(dto.getStock())) {
-                productsToUpdate.remove(dto);
-                invalidItems.add(dto);
-            }
-        }
-
-        try {
-            vinylDAO.update(productsToUpdate);
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Error during update operation", e);
-        }
-
-        return invalidItems;
-    }
-
-    public void deleteService(List<VinylDTO> productsToDelete) {
-        try {
-            vinylDAO.delete(productsToDelete);
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Error during delete operation", e);
-        }
     }
 }
