@@ -1,7 +1,7 @@
 package org.example.model.Service.products;
 
 
-import org.example.config.ObjectCreationException;
+import org.example.config.ObjectValidationException;
 import org.example.model.DTO.products.ProductDTO;
 
 import java.util.*;
@@ -15,8 +15,8 @@ public abstract class AbstractProductsService<T extends ProductDTO> {
     List<String> requiredFields = new ArrayList<>();
     Map<String, String> errorMap = new HashMap<>();
 
-    protected void validatePrice(float sellingPrice , float buyingCost){
-        if (sellingPrice < (buyingCost * 1.5)){
+    protected void validatePrice(float sellingPrice , float buyingPrice){
+        if (sellingPrice < (buyingPrice * 1.5)){
             errorMap.put("sellingPrice", "Selling Price must at least 1.5 times the buying cost");
         }
     }
@@ -45,19 +45,27 @@ public abstract class AbstractProductsService<T extends ProductDTO> {
          validateObjectFields(formData);
 
         if (!errorMap.isEmpty()) {
-            throw new ObjectCreationException(errorMap);
+            throw new ObjectValidationException(errorMap);
         }
 
          // UI has taken care of parsing inputs before populating formData
          validatePrice((float) formData.get("sellingPrice"), (float) formData.get("buyingPrice"));
          validateStockLevel((Integer) formData.get("stock"));
         if (!errorMap.isEmpty()) {
-            throw new ObjectCreationException(errorMap);
+            throw new ObjectValidationException(errorMap);
         }
     }
 
     public abstract T createService(Map<String,Object> params);
-    // public abstract List<T> updateService(List<T> productsToUpdate);
+    public void updateService(ProductDTO dto){
+         errorMap.clear();
+         validateStockLevel( (Integer) dto.getStock());
+         validatePrice(dto.getSellingPrice(), dto.getBuyingPrice());
+
+         if (!errorMap.isEmpty()) {
+             throw new ObjectValidationException(errorMap);
+         }
+     };
 
 
 }

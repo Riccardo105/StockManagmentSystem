@@ -82,4 +82,21 @@ public class PaperBookDTO extends BookDTO {
             return new PaperBookDTO(this);
         }
     }
+
+    // Copy constructor needed by clone method
+    public PaperBookDTO (PaperBookDTO other){
+        super(other);
+        this.bindingType = other.bindingType;
+        this.numPages = other.numPages;
+        this.edition = other.edition;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public PaperBookDTO clone(){
+        return new PaperBookDTO(this);
+    };
 }

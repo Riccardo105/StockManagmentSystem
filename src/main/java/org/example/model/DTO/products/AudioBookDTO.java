@@ -82,4 +82,21 @@ public class AudioBookDTO extends BookDTO {
             return new AudioBookDTO(this);
         }
     }
+
+    // Copy constructor needed by clone method
+    public AudioBookDTO (AudioBookDTO other) {
+        super(other);
+        this.narrator = other.narrator;
+        this.fileSize = other.fileSize;
+        this.fileFormat = other.fileFormat;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public AudioBookDTO clone(){
+        return new AudioBookDTO(this);
+    };
 }

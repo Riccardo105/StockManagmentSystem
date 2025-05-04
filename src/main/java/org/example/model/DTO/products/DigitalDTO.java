@@ -81,4 +81,21 @@ public class DigitalDTO extends MusicDTO {
             return new DigitalDTO(this);
         }
     }
+
+    // Copy constructor needed by clone method
+    public DigitalDTO (DigitalDTO other){
+        super(other);
+        this.fileFormat = other.fileFormat;
+        this.fileSize = other.fileSize;
+        this.bitrateMbps = other.bitrateMbps;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public DigitalDTO clone(){
+        return new DigitalDTO(this);
+    };
 }

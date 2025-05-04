@@ -8,18 +8,19 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.ProductType;
-import org.example.config.ObjectCreationException;
 import org.example.controller.DashBoardController;
+import org.example.model.DTO.products.ProductDTO;
 import org.example.view.partials.ProductFormBuilder;
 import org.example.view.partials.ProductInfo;
 import org.example.view.partials.ProductInfoPreview;
 import org.example.view.partials.SearchBar;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 
@@ -56,9 +57,18 @@ public class DashboardView extends VBox {
 
         // print stock report button
         Button stockReport = new Button("Stock Report");
+        stockReport.setOnAction(event -> {
+            dashBoardController.handleStockReport();
+        });
 
-        HBox controlPanel = new HBox(stockReport, createNew);
-        HBox.setMargin(stockReport, new Insets(0, 10, 0, 0));
+        // undo changes button
+        Button undoChanges = new Button("Undo Changes");
+        undoChanges.setOnAction(event -> {
+            productsPreview.undoChanges();
+        });
+
+        HBox controlPanel = new HBox(undoChanges, stockReport, createNew);
+        HBox.setMargin(stockReport, new Insets(0, 10, 0, 10));
         controlPanel.setAlignment(Pos.TOP_RIGHT);
         controlPanel.setMaxWidth(Double.MAX_VALUE);
 
@@ -66,6 +76,9 @@ public class DashboardView extends VBox {
 
 
         Button saveChanges = new Button("Save changes");
+        saveChanges.setOnAction(event -> {
+            productsPreview.saveChanges(dashBoardController);
+        });
 
         getChildren().addAll(searchBar, controlPanel, productsPreview, saveChanges);
 
@@ -80,6 +93,7 @@ public class DashboardView extends VBox {
 
         Stage createProductStage = new Stage();
         createProductStage.setTitle("Create New " + productType.name());
+        createProductStage.initModality(Modality.APPLICATION_MODAL);
 
         ScrollPane form = ProductFormBuilder.ProductFormManager(productType);
 
@@ -184,7 +198,7 @@ public class DashboardView extends VBox {
         Scene createProductScene = new Scene(formContainer, 400, 400);
 
         createProductStage.setScene(createProductScene);
-        createProductStage.show();
+        createProductStage.showAndWait();
     }
 
     /**
@@ -222,10 +236,30 @@ public class DashboardView extends VBox {
 
 
     /**
-     * @param productInfo the product info window created in the preview table
+     * @param product the product info window created in the preview table
      */
-    public static void showProductDetailWindow(ProductInfo productInfo) {
+    public static void showProductDetailWindow(ProductDTO product) {
+        Stage detailStage = new Stage();
+        detailStage.setTitle("Product Details");
 
+        // Set modality to make it a modal window (blocks interaction with parent window)
+        detailStage.initModality(Modality.APPLICATION_MODAL);
+
+        // Create the product view using our reusable partial
+        VBox productView = ProductInfo.createProductView(product);
+        productView.setPadding(new Insets(15));
+
+        // Create scene and set it on the stage
+        Scene scene = new Scene(productView, 400, 750); // Width: 400, Height: 600
+        detailStage.setScene(scene);
+
+        // Configure window behavior
+        detailStage.setResizable(true);
+        detailStage.setMinWidth(350);
+        detailStage.setMinHeight(400);
+
+        // Show the window
+        detailStage.showAndWait();
     }
 }
 

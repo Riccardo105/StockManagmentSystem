@@ -7,8 +7,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
 
 public class ObjectFileWriter {
 
@@ -19,21 +22,48 @@ public class ObjectFileWriter {
         try {
             boolean isNewFile = file.createNewFile();
             if (!isNewFile && !file.exists()) {
-                //Handles logical exception during file creation
                 throw new IOException("File creation failed unexpectedly");
             }
         } catch (IOException e) {
-            //Handles system level I/O errors
             throw new IOException("File operation failed: " + e.getMessage(), e);
         }
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-            bw.write(object.toString());
-        }catch (IOException e) {
+            // Write formatted object info
+            bw.write("========== Product Info ==========");
+            bw.newLine();
+
+            // Use reflection to get fields from getter methods
+            List<Method> getters = Arrays.stream(object.getClass().getMethods())
+                    .filter(m -> m.getName().startsWith("get") && m.getParameterCount() == 0 && !m.getName().equals("getClass"))
+                    .toList();
+
+            for (Method getter : getters) {
+                try {
+                    String fieldName = formatFieldName(getter.getName());
+                    Object value = getter.invoke(object);
+                    String valueStr = (value != null) ? value.toString() : "null";
+                    bw.write(String.format("%-25s : %s", fieldName, valueStr));
+                    bw.newLine();
+                } catch (Exception e) {
+                    System.err.println("Error accessing field " + getter.getName() + ": " + e.getMessage());
+                }
+            }
+
+            bw.write("==================================");
+            System.out.println("Product info successfully saved to: " + file.getAbsolutePath());
+        } catch (IOException e) {
+            System.err.println( e.getMessage());
+            e.printStackTrace();
             throw new IOException("File operation failed: " + e.getMessage(), e);
         }
+    }
 
-        }
+    // Helper method to format field names
+    private static String formatFieldName(String getterName) {
+        String fieldName = getterName.substring(3);
+        return fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+    }
 
     public static void writeStockReportToFile(List<ProductDTO> products) throws IOException {
         ArrayList<ProductWrapper> productsToWrite = new ArrayList<>();

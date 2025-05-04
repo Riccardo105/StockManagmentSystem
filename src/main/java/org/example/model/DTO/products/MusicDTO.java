@@ -119,4 +119,23 @@ public abstract class MusicDTO extends ProductDTO {
             };
         }
 
+    // Copy constructor needed by clone method
+    public MusicDTO(MusicDTO other) {
+        super(other);
+        this.format = other.format;
+        this.artist = other.artist;
+        this.label = other.label;
+        this.genre = other.genre;
+        this.releaseDate = other.releaseDate;
+        this.playTime = other.playTime;
+        this.tracksNum = other.tracksNum;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public abstract MusicDTO clone();
+
 }

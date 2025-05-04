@@ -1,15 +1,11 @@
 package org.example.model.Service.products;
 
 import com.google.inject.Inject;
-import org.example.config.ObjectCreationException;
-import org.example.model.DAO.products.AudioBookDAO;
+import org.example.config.ObjectValidationException;
 import org.example.model.DTO.products.AudioBookDTO;
-import org.springframework.http.ResponseEntity;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 public class AudioBookService extends AbstractProductsService<AudioBookDTO> {
@@ -42,8 +38,8 @@ public class AudioBookService extends AbstractProductsService<AudioBookDTO> {
                         .setFileFormat(formData.get("fileFormat").toString())
                         .build();
 
-            } catch (ObjectCreationException e) {
-                throw new ObjectCreationException(e.getErrorMap());
+            } catch (ObjectValidationException e) {
+                throw new ObjectValidationException(e.getErrorMap());
             }
     }
 

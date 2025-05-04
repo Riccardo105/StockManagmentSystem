@@ -81,4 +81,22 @@ public class VinylDTO extends MusicDTO {
             return new VinylDTO(this);
         }
     }
+
+    // Copy constructor needed by clone method
+    public VinylDTO (VinylDTO other) {
+        super(other);
+        this.rpm = other.rpm;
+        this.size = other.size;
+        this.edition = other.edition;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public VinylDTO clone(){
+        return new VinylDTO(this);
+    };
+
 }

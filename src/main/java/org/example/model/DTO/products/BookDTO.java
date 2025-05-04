@@ -105,4 +105,23 @@ public abstract class BookDTO extends ProductDTO {
         }
 
     }
+
+    // Copy constructor needed by clone method
+    public BookDTO(BookDTO other) {
+        super(other);
+        this.format = other.format;
+        this.author = other.author;
+        this.publisher = other.publisher;
+        this.genre = other.genre;
+        this.series = other.series;
+        this.releaseDate = other.releaseDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public abstract BookDTO clone();
+
 }

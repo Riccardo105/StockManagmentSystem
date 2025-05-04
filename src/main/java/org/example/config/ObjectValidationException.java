@@ -7,10 +7,10 @@ import java.util.Map;
  * returns error map to display in UI
  * it maps the field of the object to its error message
  */
-public class ObjectCreationException extends RuntimeException {
+public class ObjectValidationException extends RuntimeException {
     private final Map<String, String> errorMap;
 
-    public ObjectCreationException(Map<String, String> errorMap) {
+    public ObjectValidationException(Map<String, String> errorMap) {
         this.errorMap = errorMap;
     }
 

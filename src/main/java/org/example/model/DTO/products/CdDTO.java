@@ -82,4 +82,21 @@ public class CdDTO extends MusicDTO {
             return new CdDTO(this);
         }
     }
+
+    // Copy constructor needed by clone method
+    public CdDTO (CdDTO other) {
+        super(other);
+        this.numOfDiscs = other.numOfDiscs;
+        this.conditions = other.conditions;
+        this.bitrateMbps = other.bitrateMbps;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public CdDTO clone(){
+        return new CdDTO(this);
+    };
 }

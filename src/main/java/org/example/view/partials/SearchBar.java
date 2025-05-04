@@ -25,6 +25,7 @@ public class SearchBar extends HBox {
     private final ComboBox<String> subCategory;
     private final TextField searchPrompt;
 
+    // consumer is set in the dashboardView, and it's used to reference ProductView.updateTableEntries()
     public SearchBar(DashBoardController controller, Consumer<List<ProductDTO>> callback) {
         this.dashboardController = controller;
 
