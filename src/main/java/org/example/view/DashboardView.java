@@ -202,8 +202,8 @@ public class DashboardView extends VBox {
     }
 
     /**
-     * this method is used to map the discovered errors back to the form field.
-     * this si achieved by keeping track of the field name
+     * this method is used to map the discovered errors back to the form's fields.
+     * this is achieved by keeping track of the field name
      * @param errorMap, this map, maps the label of the field to its error message
      */
     private void mapErrorsToFormFields(Map<String, String> errorMap) {
@@ -214,7 +214,7 @@ public class DashboardView extends VBox {
                 Tooltip tooltip = new Tooltip(errorMsg);
                 Tooltip.install(field, tooltip);
             });
-            return;
+
         }
     }
 

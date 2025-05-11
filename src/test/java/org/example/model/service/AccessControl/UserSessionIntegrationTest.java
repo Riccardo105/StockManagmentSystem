@@ -5,7 +5,7 @@ import org.example.model.DAO.accessControl.RolePermissionDAO;
 import org.example.model.DAO.accessControl.UserDAO;
 import org.example.model.DAO.accessControl.UserRoleDAO;
 import org.example.model.DTO.AccessControl.*;
-import org.example.model.Service.UserSessionService;
+import org.example.model.Service.UserService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -70,43 +70,43 @@ public class UserSessionIntegrationTest {
     public void testSetUserPermissions() {
         Session session = sessionFactory.openSession();
         List<PermissionsDTO> permissions = session.createQuery("from PermissionsDTO", PermissionsDTO.class).getResultList();
-        UserSessionService userSessionService = new UserSessionService(userDAO, userRoleDAO, rolePermissionDAO);
-        userSessionService.setUserPermissions(permissions);
+        UserService userService = new UserService(userDAO, userRoleDAO, rolePermissionDAO);
+        userService.setUserPermissions(permissions);
 
-        assertEquals(1, userSessionService.getUserPermissions().size());
+        assertEquals(1, userService.getUserPermissions().size());
 
-        userSessionService.getUserPermissions().clear();
+        userService.getUserPermissions().clear();
 
     }
     @Test
     public void testCheckUserHasPermission() {
         Session session = sessionFactory.openSession();
         List<PermissionsDTO> permissions = session.createQuery("from PermissionsDTO", PermissionsDTO.class).getResultList();
-        UserSessionService userSessionService = new UserSessionService(userDAO, userRoleDAO, rolePermissionDAO);
-        userSessionService.setUserPermissions(permissions);
+        UserService userService = new UserService(userDAO, userRoleDAO, rolePermissionDAO);
+        userService.setUserPermissions(permissions);
 
         OperationDTO operation = new OperationDTO("Test Operation");
         ResourceDTO resource = new ResourceDTO("Test Resource");
         PermissionsDTO permission = new PermissionsDTO(operation, resource);
 
-        assertTrue(userSessionService.checkUserHasPermission(permission));
+        assertTrue(userService.checkUserHasPermission(permission));
     }
     @Test
     public void testTearDownSession() {
         Session session = sessionFactory.openSession();
         List<PermissionsDTO> permissions = session.createQuery("from PermissionsDTO", PermissionsDTO.class).getResultList();
-        UserSessionService userSessionService = new UserSessionService(userDAO, userRoleDAO, rolePermissionDAO);
-        userSessionService.setUserPermissions(permissions);
+        UserService userService = new UserService(userDAO, userRoleDAO, rolePermissionDAO);
+        userService.setUserPermissions(permissions);
 
-        userSessionService.clearUserSession();
+        userService.clearUserSession();
 
-        assertEquals(0, userSessionService.getUserPermissions().size());
+        assertEquals(0, userService.getUserPermissions().size());
     }
 
     @Test
     public void testSignup(){
 
-        UserSessionService userSessionService = new UserSessionService(userDAO, userRoleDAO, rolePermissionDAO);
+        UserService userService = new UserService(userDAO, userRoleDAO, rolePermissionDAO);
 
         // correct form
         Map<String, String> TestCase1 = new HashMap<>();
@@ -130,14 +130,14 @@ public class UserSessionIntegrationTest {
         TestCase3.put("password", "ValidPassword123");
 
         assertThrows(IllegalArgumentException.class, () -> {
-            userSessionService.signUpHandler(TestCase2);
+            userService.signUpHandler(TestCase2);
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            userSessionService.signUpHandler(TestCase3);
+            userService.signUpHandler(TestCase3);
         });
 
-        userSessionService.signUpHandler(TestCase1);
+        userService.signUpHandler(TestCase1);
         UserDTO createdUser = userDAO.getByEmail("john.doe@example.com");
         assertEquals("john.doe@example.com", createdUser.getEmail());
 

@@ -5,16 +5,16 @@ import org.example.model.DAO.accessControl.RolePermissionDAO;
 import org.example.model.DAO.accessControl.UserDAO;
 import org.example.model.DAO.accessControl.UserRoleDAO;
 import org.example.model.DTO.AccessControl.UserDTO;
-import org.example.model.Service.UserSessionService;
+import org.example.model.Service.UserService;
 import org.hibernate.Session;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UserSessionUnitTest extends UserSessionService {
+public class UserUnitTest extends UserService {
 
-    public UserSessionUnitTest(UserDAO userDAO, UserRoleDAO userRoleDAO, RolePermissionDAO rolePermissionDAO) {
+    public UserUnitTest(UserDAO userDAO, UserRoleDAO userRoleDAO, RolePermissionDAO rolePermissionDAO) {
         super(userDAO, userRoleDAO, rolePermissionDAO);
     }
 

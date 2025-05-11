@@ -1,7 +1,9 @@
 package org.example.model.Service;
 
 
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.example.config.DbConnection;
+import org.example.config.ObjectValidationException;
 import org.example.model.DAO.accessControl.RolePermissionDAO;
 import org.example.model.DAO.accessControl.UserDAO;
 import org.example.model.DAO.accessControl.UserRoleDAO;
@@ -10,16 +12,12 @@ import org.example.model.DTO.AccessControl.RoleDTO;
 import org.example.model.DTO.AccessControl.UserDTO;
 import org.hibernate.Session;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
-public class UserSessionService {
+public class UserService {
 
     private final HashSet<PermissionsDTO> userPermissions = new HashSet<>();
     private UserDTO currentUser = null;
@@ -29,7 +27,7 @@ public class UserSessionService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     // necessary dependencies injected through guice
-    public UserSessionService(UserDAO userDAO, UserRoleDAO userRoleDAO, RolePermissionDAO rolePermissionDAO) {
+    public UserService(UserDAO userDAO, UserRoleDAO userRoleDAO, RolePermissionDAO rolePermissionDAO) {
         this.userDAO = userDAO;
         this.userRoleDAO = userRoleDAO;
         this.rolePermissionDAO = rolePermissionDAO;
@@ -75,7 +73,8 @@ public class UserSessionService {
 
     }
 
-    public void signUpHandler (Map<String, String> formData) {
+    public UserDTO signupService (Map<String, String> formData) {
+        HashMap<String, String> errorMap = new HashMap<>();
         String password = formData.get("password");
         String email = formData.get("email");
 
@@ -84,40 +83,39 @@ public class UserSessionService {
          */
         for (Map.Entry<String, String> entry : formData.entrySet()) {
             if (entry.getValue() == null) {
-                throw new IllegalArgumentException(entry.getKey() + " cannot be null.");
+                errorMap.put(entry.getKey(), "field must not be null");
             }
         }
 
         // checks password respects constraints
        List<String> errors = passwordValidationHelper(password);
         if (!errors.isEmpty()) {
-            throw new IllegalArgumentException("Password validation failed: " + String.join(", ", errors));
+            for (String error : errors) {
+                errorMap.put("password", error);
+            }
 
         }
         // checks email is unique
         boolean isNotValid = emailValidationHelper(email);
         // if true is returned it means the email is already in use
         if (isNotValid) {
-            throw new IllegalArgumentException("invalid email: " + email);
+            errorMap.put("email", "email already in use" );
 
         }
         // performing signup if all checks pass
         // hashing password (default salt rounds 10)
         String hashedPassword = encoder.encode(password);
 
+        if (!errorMap.isEmpty()) {
+            throw new ObjectValidationException(errorMap);
+        }
         // user object created if validation passes
-        UserDTO newUser = new UserDTO.Builder()
+       return  new UserDTO.Builder()
                 .setFirstName(formData.get("firstName"))
                 .setLastName(formData.get("lastName"))
                 .setEmail(email)
                 .setPassword(hashedPassword)
                 .build();
-
-        userDAO.create(newUser);
-
-        // default role assigned at registration
-        UserRoleDAO userRoleDAO = new UserRoleDAO(DbConnection.getSessionFactory());
-        userRoleDAO.assignDefaultRole(newUser);
 
     }
 
@@ -137,7 +135,7 @@ public class UserSessionService {
         setUserPermissions(rolePermissionDAO.getPermissionsForRoles(userRoles));
     }
 
-    // SignupHandler helpers (only run if signUp successful)
+    // SignupService helpers (only run if signUp successful)
     protected List<String> passwordValidationHelper(String password) {
         List<String> errors = new ArrayList<>();
 
