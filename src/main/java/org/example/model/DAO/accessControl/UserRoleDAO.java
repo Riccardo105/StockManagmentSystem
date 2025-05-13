@@ -26,18 +26,28 @@ public class UserRoleDAO  {
         this.sessionFactory = sessionFactory;
     }
 
-    public void assignDefaultRole(UserDTO userDTO) {
-        RoleDTO roleDTO = new RoleDTO("Sales Assistant");
-        UserRoleDTO userRoleDTO = new UserRoleDTO(userDTO, roleDTO);
+    // needed by Activate Account window
+    public List<RoleDTO> getAvailableRoles(){
         try (Session session = sessionFactory.openSession()) {
-            Transaction tx = session.beginTransaction();
-            session.save(userRoleDTO);
-            tx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("failed to assign default role to user" + e);
+            return session.createQuery("from RoleDTO", RoleDTO.class).getResultList();
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
         }
     }
+
+    public void assignRoleToUser(UserDTO user, RoleDTO role) {
+        UserRoleDTO userRole = new UserRoleDTO(user, role);
+
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.save(userRole);
+            tx.commit();
+        }catch (RuntimeException e) {
+            throw e;
+        }
+
+    }
+
 
 public List<RoleDTO> getRolesForUser(UserDTO user) {
     try (Session session = sessionFactory.openSession()) {

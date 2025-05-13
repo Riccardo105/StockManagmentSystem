@@ -233,6 +233,14 @@ public class ProductInfoPreview extends VBox {
         }).start();
 
     }
+
+    /**
+     * needed by dashboard to set editability according to user permissions
+     * @return the dashboard's product tables
+     */
+    public TableView<ProductDTO> getProductsTable() {
+        return productsTable;
+    }
 }
 
 

@@ -1,6 +1,6 @@
 package org.example.model.DAO.accessControl;
 import com.google.inject.Inject;
-import org.example.model.DTO.AccessControl.PermissionsDTO;
+import org.example.model.DTO.AccessControl.RoleDTO;
 import org.example.model.DTO.AccessControl.UserDTO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -63,4 +63,6 @@ public class UserDAO {
         }
 
     }
+
+
 }

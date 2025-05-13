@@ -15,7 +15,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         Injector injector = Guice.createInjector(new GuiceConfig());
         ViewManager.init(primaryStage, injector);
-        ViewManager.showSignupView();
+        ViewManager.showLoginView();
     }
     public static void main(String[] args) {
         launch(args);}

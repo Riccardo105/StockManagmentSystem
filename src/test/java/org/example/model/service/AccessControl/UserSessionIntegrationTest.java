@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.* ;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,8 @@ public class UserSessionIntegrationTest {
     protected static SessionFactory sessionFactory ;
     protected UserDAO userDAO = new UserDAO(sessionFactory);
     protected UserRoleDAO userRoleDAO = new UserRoleDAO(sessionFactory);
-    protected RolePermissionDAO rolePermissionDAO = new RolePermissionDAO(sessionFactory) ;
+    protected RolePermissionDAO rolePermissionDAO = new RolePermissionDAO(sessionFactory);
+    protected BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @BeforeAll
     public static void setUp() {
@@ -38,7 +40,7 @@ public class UserSessionIntegrationTest {
         session.save(resource);
         session.save(role);
 
-        PermissionsDTO permission = new PermissionsDTO(operation, resource);
+        PermissionDTO permission = new PermissionDTO(operation, resource);
         session.save(permission);
         session.getTransaction().commit();
         session.close();
@@ -69,8 +71,8 @@ public class UserSessionIntegrationTest {
     @Test
     public void testSetUserPermissions() {
         Session session = sessionFactory.openSession();
-        List<PermissionsDTO> permissions = session.createQuery("from PermissionsDTO", PermissionsDTO.class).getResultList();
-        UserService userService = new UserService(userDAO, userRoleDAO, rolePermissionDAO);
+        List<PermissionDTO> permissions = session.createQuery("from PermissionsDTO", PermissionDTO.class).getResultList();
+        UserService userService = new UserService(userDAO, userRoleDAO, rolePermissionDAO, encoder);
         userService.setUserPermissions(permissions);
 
         assertEquals(1, userService.getUserPermissions().size());
@@ -81,21 +83,21 @@ public class UserSessionIntegrationTest {
     @Test
     public void testCheckUserHasPermission() {
         Session session = sessionFactory.openSession();
-        List<PermissionsDTO> permissions = session.createQuery("from PermissionsDTO", PermissionsDTO.class).getResultList();
-        UserService userService = new UserService(userDAO, userRoleDAO, rolePermissionDAO);
+        List<PermissionDTO> permissions = session.createQuery("from PermissionsDTO", PermissionDTO.class).getResultList();
+        UserService userService = new UserService(userDAO, userRoleDAO, rolePermissionDAO, encoder);
         userService.setUserPermissions(permissions);
 
         OperationDTO operation = new OperationDTO("Test Operation");
         ResourceDTO resource = new ResourceDTO("Test Resource");
-        PermissionsDTO permission = new PermissionsDTO(operation, resource);
+        PermissionDTO permission = new PermissionDTO(operation, resource);
 
         assertTrue(userService.checkUserHasPermission(permission));
     }
     @Test
     public void testTearDownSession() {
         Session session = sessionFactory.openSession();
-        List<PermissionsDTO> permissions = session.createQuery("from PermissionsDTO", PermissionsDTO.class).getResultList();
-        UserService userService = new UserService(userDAO, userRoleDAO, rolePermissionDAO);
+        List<PermissionDTO> permissions = session.createQuery("from PermissionsDTO", PermissionDTO.class).getResultList();
+        UserService userService = new UserService(userDAO, userRoleDAO, rolePermissionDAO, encoder);
         userService.setUserPermissions(permissions);
 
         userService.clearUserSession();
@@ -106,7 +108,7 @@ public class UserSessionIntegrationTest {
     @Test
     public void testSignup(){
 
-        UserService userService = new UserService(userDAO, userRoleDAO, rolePermissionDAO);
+        UserService userService = new UserService(userDAO, userRoleDAO, rolePermissionDAO, encoder);
 
         // correct form
         Map<String, String> TestCase1 = new HashMap<>();

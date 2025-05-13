@@ -1,6 +1,7 @@
 package org.example.view;
 
 import com.google.inject.Inject;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,40 +13,51 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.ProductType;
 import org.example.controller.DashBoardController;
+import org.example.controller.LoginController;
+import org.example.model.DTO.AccessControl.OperationDTO;
+import org.example.model.DTO.AccessControl.PermissionDTO;
+import org.example.model.DTO.AccessControl.ResourceDTO;
+import org.example.model.DTO.AccessControl.UserDTO;
 import org.example.model.DTO.products.ProductDTO;
-import org.example.view.partials.ProductFormBuilder;
-import org.example.view.partials.ProductInfo;
-import org.example.view.partials.ProductInfoPreview;
-import org.example.view.partials.SearchBar;
+import org.example.model.Service.PermissionManager;
+import org.example.model.Service.UserService;
+import org.example.view.partials.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 public class DashboardView extends VBox {
 
     private final DashBoardController dashBoardController;
+    private final LoginController loginController;
     private final Map<String, String> errorMap = new HashMap<>();
 
-    @Inject
-    public DashboardView(DashBoardController controller) {
+    // widget instantiated here to be accessible by configurePermissions()
+    private final ProductInfoPreview productsPreview;
+    private final  HBox searchBar;
+    private final ComboBox<ProductType> createNew;
+    private final Button stockReport;
+    private final Button saveChanges;
 
-        this.dashBoardController = controller;
+
+    @Inject
+    public DashboardView(DashBoardController dashBoardController, LoginController loginController) {
+
+        this.dashBoardController = dashBoardController;
+        this.loginController = loginController;
         this.setSpacing(20);
         this.setPadding(new Insets(20));
         this.setAlignment(Pos.TOP_CENTER);
 
         //product table
-        ProductInfoPreview productsPreview = new ProductInfoPreview();
+        productsPreview = new ProductInfoPreview();
 
         // search bar
         // callback points to productPreview method
-        HBox searchBar = new SearchBar(controller, productsPreview::updateTableEntries);
+        searchBar = new SearchBar(dashBoardController, productsPreview::updateTableEntries);
 
         // create new button
-        ComboBox<ProductType> createNew = new ComboBox<>();
+        createNew = new ComboBox<>();
         createNew.getItems().addAll(ProductType.values());
         createNew.setPromptText("Create new");
         createNew.setOnAction(event -> {
@@ -56,7 +68,7 @@ public class DashboardView extends VBox {
         });
 
         // print stock report button
-        Button stockReport = new Button("Stock Report");
+        stockReport = new Button("Stock Report");
         stockReport.setOnAction(event -> {
             dashBoardController.handleStockReport();
         });
@@ -67,20 +79,29 @@ public class DashboardView extends VBox {
             productsPreview.undoChanges();
         });
 
-        HBox controlPanel = new HBox(undoChanges, stockReport, createNew);
+        Button logout = new Button("Logout");
+        logout.setOnAction(event -> {
+            loginController.handleLogout();
+        });
+
+        HBox controlPanel = new HBox(logout, undoChanges, stockReport, createNew);
         HBox.setMargin(stockReport, new Insets(0, 10, 0, 10));
+        HBox.setMargin(logout, new Insets(0, 375, 0, 10));
         controlPanel.setAlignment(Pos.TOP_RIGHT);
         controlPanel.setMaxWidth(Double.MAX_VALUE);
 
         VBox.setVgrow(controlPanel, Priority.ALWAYS);
 
-
-        Button saveChanges = new Button("Save changes");
+        // save changes
+        saveChanges = new Button("Save changes");
         saveChanges.setOnAction(event -> {
             productsPreview.saveChanges(dashBoardController);
         });
 
         getChildren().addAll(searchBar, controlPanel, productsPreview, saveChanges);
+
+        // permission checked as soon as dashboard is initialised
+        configurePermissions();
 
     }
 
@@ -260,6 +281,55 @@ public class DashboardView extends VBox {
 
         // Show the window
         detailStage.showAndWait();
+    }
+
+    /**
+     * shows notification box for account that need activation to admin accounts
+     * @param usersToActivate list of user whom account is not active
+     */
+    public void showActivateAccountWindow(Stage parentStage, List<UserDTO> usersToActivate) {
+        Stage activateStage = new Stage();
+        activateStage.setTitle("Account(s) need attention");
+
+        activateStage.initModality(Modality.WINDOW_MODAL);
+        activateStage.initOwner(parentStage);
+
+        // Create the AccountActivation view
+        VBox activationView = new AccountActivation( usersToActivate, loginController.getAvailableRoles(), loginController);
+        activationView.setPadding(new Insets(15));
+
+        // Create the scene with a landscape-oriented size
+        Scene scene = new Scene(activationView);
+        activateStage.setScene(scene);
+
+        // Configure window behavior
+        activateStage.setWidth(400);
+
+
+        // Show the modal window and wait for it to close
+        activateStage.showAndWait();
+    }
+
+    private void configurePermissions(){
+        productsPreview.getProductsTable().setEditable(PermissionManager.canUpdateProducts(UserService.getCurrentUserPermissions()));
+        searchBar.setDisable(!PermissionManager.canSearchProducts(UserService.getCurrentUserPermissions()));
+        createNew.setDisable(!PermissionManager.canCreateProduct(UserService.getCurrentUserPermissions()));
+        stockReport.setDisable(!PermissionManager.canPrintStockReport(UserService.getCurrentUserPermissions()));
+        saveChanges.setDisable(!PermissionManager.canUpdateProducts(UserService.getCurrentUserPermissions()));
+
+        if (PermissionManager.canActivateAccount(UserService.getCurrentUserPermissions())) {
+            List<UserDTO> userToUpdate = loginController.getInactiveAccounts();
+
+            if (!userToUpdate.isEmpty()) {
+
+                Platform.runLater(() -> {
+                    showActivateAccountWindow(ViewManager.getPrimaryStage(), userToUpdate);
+                });
+            }
+
+        }
+
+
     }
 }
 

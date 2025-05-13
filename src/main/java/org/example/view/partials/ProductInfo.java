@@ -15,6 +15,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.example.model.DTO.products.ProductDTO;
 import org.example.model.Service.ObjectFileWriter;
+import org.example.model.Service.PermissionManager;
+import org.example.model.Service.UserService;
 import org.example.view.DashboardView;
 
 import java.io.IOException;
@@ -22,6 +24,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class ProductInfo {
+
+    public static Button printButton;
 
     public static VBox createProductView(ProductDTO product) {
         VBox container = new VBox(10);
@@ -93,7 +97,8 @@ public class ProductInfo {
         statusLabel.setFont(Font.font("System", FontWeight.NORMAL, 12));
         statusLabel.setTextFill(Color.DARKGREEN);
 
-        Button printButton = new Button("Print Info");
+        printButton = new Button("Print Info");
+        printButton.setDisable(!PermissionManager.canPrintProduct(UserService.getCurrentUserPermissions()));
         printButton.setFont(Font.font("System", FontWeight.BOLD, 14));
         printButton.setOnAction(e -> {
             try {
@@ -140,4 +145,5 @@ public class ProductInfo {
         String fieldName = getterName.substring(3); // Remove "get"
         return fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1); // camelCase
     }
+
 }

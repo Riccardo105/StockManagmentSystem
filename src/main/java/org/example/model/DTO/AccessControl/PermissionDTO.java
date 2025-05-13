@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "permissions")
-public class PermissionsDTO {
+public class PermissionDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +19,9 @@ public class PermissionsDTO {
     @JoinColumn(name = "resourceId")
     private ResourceDTO resource;
 
-    public PermissionsDTO() {}
+    public PermissionDTO() {}
 
-    public PermissionsDTO(OperationDTO operation, ResourceDTO resource) {
+    public PermissionDTO(OperationDTO operation, ResourceDTO resource) {
         this.operation = operation;
         this.resource = resource;
     }
@@ -42,7 +42,7 @@ public class PermissionsDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PermissionsDTO that = (PermissionsDTO) o;
+        PermissionDTO that = (PermissionDTO) o;
         return Objects.equals(this.operation, that.operation) &&
                 Objects.equals(this.resource, that.resource);
     }

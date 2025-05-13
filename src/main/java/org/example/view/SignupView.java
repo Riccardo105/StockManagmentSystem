@@ -1,12 +1,12 @@
 package org.example.view;
 
+import com.google.inject.Inject;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.example.controller.SignupController;
-import org.example.view.partials.ProductFormBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,12 +15,14 @@ import java.util.Objects;
 public class SignupView extends VBox {
 
     private Map<String, String> errorMap;
-    private final SignupController signupController = new SignupController();
+    private final SignupController signupController;
 
     // form fields added to map for ease in mapping errors to ui widgets
     public Map<String, Control> fieldMap = new HashMap<>();
 
-    public SignupView() {
+    @Inject
+    public SignupView( SignupController signupController) {
+        this.signupController = signupController;
         this.setSpacing(20);
         this.setPadding(new Insets(30));
         this.setAlignment(Pos.CENTER);
@@ -89,7 +91,6 @@ public class SignupView extends VBox {
     private void signupHandler( HashMap<String, String> formData) {
         errorMap = new HashMap<>();
         for (Map.Entry<String, String> entry : formData.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
             if (entry.getValue().isEmpty()) {
                 errorMap.put(entry.getKey(), "field must not be null");
             }
@@ -104,7 +105,17 @@ public class SignupView extends VBox {
 
         // only if the previous preliminary checks have not returned errors, send form to back end
         if (errorMap.isEmpty()) {
-            errorMap = signupController.signupHandler(formData);
+            try {
+                errorMap = signupController.handleSignup(formData);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // only if User service checks have not returned errors, redirect user to login
+            if (errorMap.isEmpty()) {
+                ViewManager.showLoginView();
+            }
+
         }
     }
 

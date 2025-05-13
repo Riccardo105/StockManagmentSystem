@@ -1,7 +1,6 @@
 package org.example.model.DTO.AccessControl;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 /**
  * This is a join table
@@ -23,11 +22,11 @@ public class RolePermissionsDTO {
     @ManyToOne
     @MapsId("permissionId")
     @JoinColumn( name = "permissionId")
-    private PermissionsDTO permission;
+    private PermissionDTO permission;
 
     public RolePermissionsDTO() {}
 
-    public RolePermissionsDTO(RoleDTO role, PermissionsDTO permission) {
+    public RolePermissionsDTO(RoleDTO role, PermissionDTO permission) {
         this.role = role;
         this.permission = permission;
         this.rolePermissionsId = new RolePermissionsId(role.getId(), permission.getId());
@@ -41,7 +40,7 @@ public class RolePermissionsDTO {
         return role;
     }
 
-    public PermissionsDTO getPermission() {
+    public PermissionDTO getPermission() {
         return permission;
     }
 

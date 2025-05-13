@@ -43,7 +43,7 @@ public class DbConnection {
             configuration.addAnnotatedClass(OperationDTO.class);
             configuration.addAnnotatedClass(ResourceDTO.class);
             configuration.addAnnotatedClass(UserDTO.class);
-            configuration.addAnnotatedClass(PermissionsDTO.class);
+            configuration.addAnnotatedClass(PermissionDTO.class);
             configuration.addAnnotatedClass(RoleDTO.class);
             configuration.addAnnotatedClass(RolePermissionsDTO.class);
             configuration.addAnnotatedClass(RolePermissionsId.class);

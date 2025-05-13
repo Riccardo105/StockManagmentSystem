@@ -1,13 +1,13 @@
 package org.example.model.Service;
 
 
-import net.bytebuddy.implementation.bytecode.Throw;
+import com.google.inject.Inject;
 import org.example.config.DbConnection;
 import org.example.config.ObjectValidationException;
 import org.example.model.DAO.accessControl.RolePermissionDAO;
 import org.example.model.DAO.accessControl.UserDAO;
 import org.example.model.DAO.accessControl.UserRoleDAO;
-import org.example.model.DTO.AccessControl.PermissionsDTO;
+import org.example.model.DTO.AccessControl.PermissionDTO;
 import org.example.model.DTO.AccessControl.RoleDTO;
 import org.example.model.DTO.AccessControl.UserDTO;
 import org.hibernate.Session;
@@ -19,57 +19,29 @@ import java.util.*;
 
 public class UserService {
 
-    private final HashSet<PermissionsDTO> userPermissions = new HashSet<>();
+    private static final HashSet<PermissionDTO> currentUserPermissions = new HashSet<>();
     private UserDTO currentUser = null;
     private final UserDAO userDAO;
     private final UserRoleDAO userRoleDAO;
     private final RolePermissionDAO rolePermissionDAO;
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder encoder;
 
     // necessary dependencies injected through guice
-    public UserService(UserDAO userDAO, UserRoleDAO userRoleDAO, RolePermissionDAO rolePermissionDAO) {
+    @Inject
+    public UserService(UserDAO userDAO, UserRoleDAO userRoleDAO, RolePermissionDAO rolePermissionDAO, BCryptPasswordEncoder encoder) {
         this.userDAO = userDAO;
         this.userRoleDAO = userRoleDAO;
         this.rolePermissionDAO = rolePermissionDAO;
+        this.encoder = encoder;
     }
 
-    public void setUserPermissions(List<PermissionsDTO> Permissions) {
-        userPermissions.addAll(Permissions);
-    }
-
-    public HashSet<PermissionsDTO> getUserPermissions() {
-        return userPermissions;
-    }
-
-    public boolean checkUserHasPermission(PermissionsDTO permission) {
-        return userPermissions.contains(permission);
-    }
-
-    public void clearUserSession() {
-        if(currentUser != null ) {
-            currentUser = null;
-        }
-        userPermissions.clear();
-    }
-
-    public void loginHandler (String email, String password) {
-        UserDTO user;
+    public UserDTO loginService (String email) {
         try{
-            user = userDAO.getByEmail(email);
+            return userDAO.getByEmail(email);
+
         }catch(Exception e){
-            throw new RuntimeException("failed to retrieve credentials" + email, e);
+            throw new RuntimeException(e);
         }
-
-        if (user == null) {
-            throw new IllegalArgumentException("incorrect credentials");
-        }
-
-        if (!encoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("incorrect credentials");
-        }
-
-        // if login is successful fetch and populate UserPermissions
-        setupUserSession(user);
 
     }
 
@@ -103,7 +75,7 @@ public class UserService {
 
         }
         // performing signup if all checks pass
-        // hashing password (default salt rounds 10)
+        // hashing password (salt round set to 12 by Guice configuration)
         String hashedPassword = encoder.encode(password);
 
         if (!errorMap.isEmpty()) {
@@ -117,22 +89,6 @@ public class UserService {
                 .setPassword(hashedPassword)
                 .build();
 
-    }
-
-    public void activateHandler (UserDTO user) {
-        try {
-            userDAO.activateAccount(user);
-        } catch (RuntimeException e) {
-            throw new RuntimeException("error occurred while trying to activate account:", e);
-        }
-
-    }
-
-    // loginHandler helpers  (only run if login successful)
-    protected void setupUserSession(UserDTO user) {
-        currentUser = user;
-        List<RoleDTO> userRoles = userRoleDAO.getRolesForUser(user);
-        setUserPermissions(rolePermissionDAO.getPermissionsForRoles(userRoles));
     }
 
     // SignupService helpers (only run if signUp successful)
@@ -166,4 +122,44 @@ public class UserService {
 
         return count > 0;
     }
+
+    public void activateHandler (UserDTO user) {
+        try {
+            userDAO.activateAccount(user);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("error occurred while trying to activate account:", e);
+        }
+
+    }
+
+    // loginHandler helpers  (only run if login successful)
+    public void setupUserSession(UserDTO user) {
+        currentUser = user;
+        List<RoleDTO> userRoles = userRoleDAO.getRolesForUser(user);
+        setUserPermissions(rolePermissionDAO.getPermissionsForRoles(userRoles));
+    }
+
+    private void setUserPermissions(List<PermissionDTO> Permissions) {
+        currentUserPermissions.addAll(Permissions);
+    }
+
+    public HashSet<PermissionDTO> getUserPermissions() {
+        return currentUserPermissions;
+    }
+
+    public boolean checkUserHasPermission(PermissionDTO permission) {
+        return currentUserPermissions.contains(permission);
+    }
+
+    public void clearUserSession() {
+        if(currentUser != null ) {
+            currentUser = null;
+        }
+        currentUserPermissions.clear();
+    }
+
+    public static HashSet<PermissionDTO> getCurrentUserPermissions() {
+        return currentUserPermissions;
+    }
+
 }

@@ -36,4 +36,10 @@ public class ViewManager {
     public static void showDashboardView(){
         setRoot(injector.getInstance(DashboardView.class));
     }
+
+
+    // needed for message boxes
+    public static Stage getPrimaryStage() {
+        return stage;
+    }
 }

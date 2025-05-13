@@ -37,8 +37,8 @@ public class RolePermissionsDAOIntegrationTest {
         session.save(resource);
         session.save(resource2);
 
-        PermissionsDTO permission = new PermissionsDTO(operation, resource);
-        PermissionsDTO permission2 = new PermissionsDTO(operation2, resource2);
+        PermissionDTO permission = new PermissionDTO(operation, resource);
+        PermissionDTO permission2 = new PermissionDTO(operation2, resource2);
         RolePermissionsDTO rolePermission = new RolePermissionsDTO(role, permission);
         RolePermissionsDTO rolePermission2 = new RolePermissionsDTO(role2, permission2);
 
@@ -77,7 +77,7 @@ public class RolePermissionsDAOIntegrationTest {
                 .uniqueResult();
 
         RolePermissionDAO rolePermissions = new RolePermissionDAO(sessionFactory);
-        List<PermissionsDTO> permissions = rolePermissions.getPermissionsForRole(role);
+        List<PermissionDTO> permissions = rolePermissions.getPermissionsForRole(role);
 
         assertNotNull(permissions);
         assertEquals("Test operation 1", permissions.getFirst().getOperation().getName());
@@ -91,7 +91,7 @@ public class RolePermissionsDAOIntegrationTest {
                                 .getResultList();
 
         RolePermissionDAO rolePermissions = new RolePermissionDAO(sessionFactory);
-        List<PermissionsDTO> permissions = rolePermissions.getPermissionsForRoles(roles);
+        List<PermissionDTO> permissions = rolePermissions.getPermissionsForRoles(roles);
 
         assertNotNull(permissions);
 

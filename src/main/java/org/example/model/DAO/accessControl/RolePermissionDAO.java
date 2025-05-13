@@ -5,7 +5,6 @@ import org.hibernate.SessionFactory;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import com.google.inject.Inject;
 
@@ -17,7 +16,7 @@ public class RolePermissionDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    public List<PermissionsDTO> getPermissionsForRole(RoleDTO role) {
+    public List<PermissionDTO> getPermissionsForRole(RoleDTO role) {
         if (role == null) {
             return Collections.emptyList();
         }
@@ -25,7 +24,7 @@ public class RolePermissionDAO {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(
                             "SELECT rp.permission FROM RolePermissionsDTO rp WHERE rp.role.id = :roleId",
-                            PermissionsDTO.class)
+                            PermissionDTO.class)
                     .setParameter("roleId", role.getId())
                     .getResultList();
         } catch (Exception e) {
@@ -33,7 +32,7 @@ public class RolePermissionDAO {
         }
     }
 
-    public List<PermissionsDTO> getPermissionsForRoles(List<RoleDTO> roles) {
+    public List<PermissionDTO> getPermissionsForRoles(List<RoleDTO> roles) {
         if (roles == null || roles.isEmpty()) {
             return Collections.emptyList();
         }
@@ -49,7 +48,7 @@ public class RolePermissionDAO {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(
                             "SELECT rp.permission FROM RolePermissionsDTO rp WHERE rp.role.id IN (:roleIds)",
-                            PermissionsDTO.class)
+                            PermissionDTO.class)
                     .setParameterList("roleIds", roleIds)
                     .getResultList();
         } catch (Exception e) {
